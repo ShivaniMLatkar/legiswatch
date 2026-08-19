@@ -1,0 +1,15 @@
+{
+  "key": "triage__IC-21-18-9-10.7",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.97,
+    "rationale": "Imposes a direct duty on state educational institutions to request commission approval before continuing degree programs that fall below statutory graduate thresholds, and to eliminate programs where approval is refused.",
+    "matched_topics": [
+      "degree programs",
+      "academic program review",
+      "commission approval"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "key": "verify__IC-21-39.5-2-4-make-complaints-available-to-trustees",
+  "schema": "VerificationVerdict",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligation_id": "IC-21-39.5-2-4-make-complaints-available-to-trustees",
+    "quote_is_grounded": true,
+    "summary_is_faithful": true,
+    "deadline_is_correct": true,
+    "unit_is_defensible": false,
+    "verifier_confidence": 0.71,
+    "objection": "The statute directs materials to the board of trustees and names no intermediary. Assigning ownership to General Counsel is plausible institutional practice but is not supported by the text; BOARD_OF_TRUSTEES or UNASSIGNED is better grounded."
+  }
+}

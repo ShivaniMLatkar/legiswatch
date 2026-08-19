@@ -1,0 +1,23 @@
+{
+  "key": "extract__IC-21-39.5-2-3",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "IC-21-39.5-2-3-substantial-consideration-in-reviews",
+        "summary": "Give substantial consideration to the section 2(a)(1)-(5) criteria before renewing a faculty contract, making a bonus decision, or completing a performance assessment.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "the institution must provide substantial consideration to performance regarding criteria in section 2(a)(1) through 2(a)(5) of this chapter",
+        "citation": "IC 21-39.5-2-3(b)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "HUMAN_RESOURCES",
+        "unit_rationale": "Duty attaches to the institution at the point of contract renewal, bonus, and performance assessment, all HR-administered processes.",
+        "confidence": 0.89
+      }
+    ],
+    "extraction_notes": null
+  }
+}

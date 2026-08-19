@@ -1,0 +1,49 @@
+{
+  "key": "extract__IC-21-42-3-5",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "IC-21-42-3-5-honor-completed-college-core",
+        "summary": "Do not require a transfer student who has completed the Indiana college core to take additional college core courses, regardless of associate degree status or delivery method.",
+        "obligation_type": "prohibition",
+        "recurrence": "continuous",
+        "verbatim_quote": "may not be required to complete additional courses in the Indiana college core at the state educational institution to which the individual transfers",
+        "citation": "IC 21-42-3-5(a)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "REGISTRAR",
+        "unit_rationale": "Application of transfer credit and core completion is administered by the registrar.",
+        "confidence": 0.9
+      },
+      {
+        "obligation_id": "IC-21-42-3-5-award-credit-per-core-transfer-library",
+        "summary": "Award credit for satisfactorily completed courses based on the course-to-course equivalencies in the core transfer library.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "The state educational institution to which the individual has transferred shall award credit to the individual for courses the individual has satisfactorily completed, based on the course to course equivalencies of the core transfer library established under IC 21-42-5.",
+        "citation": "IC 21-42-3-5(b)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "REGISTRAR",
+        "unit_rationale": "Statute places the duty on the receiving institution; credit award is a registrar function.",
+        "confidence": 0.93
+      },
+      {
+        "obligation_id": "IC-21-42-3-5-thirty-credit-gen-ed-associate",
+        "summary": "Treat an admitted holder of a Commission-approved associate of arts or science degree as having met at least 30 semester credit hours of general education requirements.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "is considered to have met at least thirty (30) semester credit hours of the state educational institution's general education requirement",
+        "citation": "IC 21-42-3-5(c)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "REGISTRAR",
+        "unit_rationale": "General education requirement satisfaction is recorded by the registrar.",
+        "confidence": 0.88
+      }
+    ],
+    "extraction_notes": null
+  }
+}

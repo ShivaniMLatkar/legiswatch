@@ -1,0 +1,14 @@
+{
+  "key": "verify__IC-21-39.5-2-4-establish-complaint-procedure",
+  "schema": "VerificationVerdict",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligation_id": "IC-21-39.5-2-4-establish-complaint-procedure",
+    "quote_is_grounded": true,
+    "summary_is_faithful": true,
+    "deadline_is_correct": true,
+    "unit_is_defensible": true,
+    "verifier_confidence": 0.95,
+    "objection": null
+  }
+}

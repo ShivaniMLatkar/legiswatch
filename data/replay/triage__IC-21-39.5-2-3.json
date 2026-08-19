@@ -1,0 +1,14 @@
+{
+  "key": "triage__IC-21-39.5-2-3",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.94,
+    "rationale": "Requires the institution to give substantial consideration to specified criteria before renewing faculty contracts, awarding bonuses, or completing performance assessments.",
+    "matched_topics": [
+      "faculty governance",
+      "employment review"
+    ]
+  }
+}

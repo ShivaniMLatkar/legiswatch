@@ -1,0 +1,101 @@
+{
+  "key": "extract__IC-21-39.5-2-4",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "IC-21-39.5-2-4-establish-complaint-procedure",
+        "summary": "Establish a procedure allowing students and employees to submit complaints that a faculty member is not meeting the statutory criteria.",
+        "obligation_type": "policy",
+        "recurrence": "one_time",
+        "verbatim_quote": "Establish a procedure that allows both students and employees to submit complaints that a faculty member or person described in section 3(a) of this chapter is not meeting the criteria described in section 2(a)(1) through 2(a)(5) of this chapter.",
+        "citation": "IC 21-39.5-2-4(a)(1)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "HUMAN_RESOURCES",
+        "unit_rationale": "Complaint intake against employees is an HR-owned process at IU.",
+        "confidence": 0.94
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-4-publicize-procedure",
+        "summary": "Publicise the complaint procedure at student orientations, on the institution's website, and during employee onboarding.",
+        "obligation_type": "disclosure",
+        "recurrence": "continuous",
+        "verbatim_quote": "Provide information regarding the procedure established under subdivision (1): (A) at student orientations; (B) on the institution's website; and (C) during employee onboarding programs.",
+        "citation": "IC 21-39.5-2-4(a)(2)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "STUDENT_SUCCESS",
+        "unit_rationale": "Two of the three required channels are student orientation and the institutional website, both owned within student success.",
+        "confidence": 0.87
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-4-refer-complaints-to-hr",
+        "summary": "Refer submitted complaints to appropriate HR professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "Refer complaints submitted under subdivision (1) to appropriate human resource professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.",
+        "citation": "IC 21-39.5-2-4(a)(3)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "HUMAN_RESOURCES",
+        "unit_rationale": "The statute names human resource professionals as the recipients.",
+        "confidence": 0.92
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-4-make-complaints-available-to-trustees",
+        "summary": "Make submitted complaints and any relevant documents, summaries, or investigations available to the board of trustees.",
+        "obligation_type": "disclosure",
+        "recurrence": "continuous",
+        "verbatim_quote": "Make complaints submitted under subdivision (1) and any relevant documents, summaries, or investigations available to the board of trustees of the institution.",
+        "citation": "IC 21-39.5-2-4(a)(4)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "GENERAL_COUNSEL",
+        "unit_rationale": "Production of investigation materials to the board is typically routed through counsel.",
+        "confidence": 0.83
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-4-annual-complaint-report-to-che",
+        "summary": "File an annual report with the Commission for Higher Education summarising the complaint procedure, how it was publicised, and complaint counts disaggregated by type.",
+        "obligation_type": "report",
+        "recurrence": "annual",
+        "verbatim_quote": "Submit a report to the commission for higher education not later than April 1, 2025, and not later than April 1 each year thereafter",
+        "citation": "IC 21-39.5-2-4(a)(5)",
+        "deadline_text": "not later than April 1, 2025, and not later than April 1 each year thereafter",
+        "first_due_date": "2025-04-01",
+        "responsible_unit": "ACCREDITATION",
+        "unit_rationale": "External compliance reporting to the Commission is coordinated through University Effectiveness and Accreditation.",
+        "confidence": 0.96
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-4-quarterly-complaint-dashboard",
+        "summary": "Publish a quarterly public dashboard of complaint volumes disaggregated by campus.",
+        "obligation_type": "disclosure",
+        "recurrence": "annual",
+        "verbatim_quote": "the institution shall publish a quarterly dashboard summarizing complaint volumes disaggregated by campus",
+        "citation": "IC 21-39.5-2-4(a)(6)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "INSTITUTIONAL_ANALYTICS",
+        "unit_rationale": "Public dashboards of institutional metrics are produced by institutional analytics.",
+        "confidence": 0.71
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-4-anonymize-complaint-data",
+        "summary": "Exclude identifying information about complainants and about faculty members who are the subject of complaints from any institutional or commission report.",
+        "obligation_type": "prohibition",
+        "recurrence": "continuous",
+        "verbatim_quote": "An institution and the commission may not include identifying information regarding: (1) complainants; or (2) faculty members against whom complaints were submitted.",
+        "citation": "IC 21-39.5-2-4(c)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "GENERAL_COUNSEL",
+        "unit_rationale": "A statutory prohibition on disclosure of identifying information is a legal compliance constraint.",
+        "confidence": 0.95
+      }
+    ],
+    "extraction_notes": "Subsection (b) places reporting duties on the commission for higher education rather than on the institution; excluded as out of scope."
+  }
+}

@@ -1,0 +1,1084 @@
+{
+  "run_id": "run-20260819-211454-61d3b2",
+  "started_at": "2026-08-19T21:14:54+00:00",
+  "finished_at": "2026-08-19T21:14:54+00:00",
+  "provider": "replay",
+  "model": "replay-cache",
+  "documents_ingested": 10,
+  "documents_relevant": 8,
+  "documents_skipped": 2,
+  "obligations_extracted": 25,
+  "obligations_auto_filed": 16,
+  "obligations_needing_review": 7,
+  "obligations_rejected": 2,
+  "total_latency_ms": 35.8,
+  "estimated_cost_usd": 0.0,
+  "results": [
+    {
+      "doc_id": "IC-21-18-9-10.7",
+      "citation": "IC 21-18-9-10.7",
+      "title": "Degree Program Reviews; Graduate Thresholds; Commission Approval to Continue",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.97,
+        "rationale": "Imposes a direct duty on state educational institutions to request commission approval before continuing degree programs that fall below statutory graduate thresholds, and to eliminate programs where approval is refused.",
+        "matched_topics": [
+          "degree programs",
+          "academic program review",
+          "commission approval"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "IC-21-18-9-10.7-request-approval-under-threshold",
+            "summary": "Request Commission for Higher Education approval to continue any degree program whose three-year average graduate count falls below the statutory threshold for its award level.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "the state educational institution must request approval from the commission to continue the degree program",
+            "citation": "IC 21-18-9-10.7(a)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the Executive Vice President for University Academic Affairs",
+            "unit_rationale": "The statute places the duty on the 'state educational institution' and concerns continuation of academic degree programs, which sits with academic affairs.",
+            "confidence": 0.93
+          },
+          "verdict": {
+            "obligation_id": "IC-21-18-9-10.7-request-approval-under-threshold",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.93,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.95. Filed to Office of the Executive Vice President for University Academic Affairs.",
+          "combined_confidence": 0.951,
+          "source_doc_id": "IC-21-18-9-10.7",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-18-9-10.7-eliminate-unapproved-programs",
+            "summary": "Eliminate any under-threshold degree program, and the costs associated with it, where the Commission declines to approve continuation.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "If the commission does not grant approval under subsection (a), the state educational institution must eliminate",
+            "citation": "IC 21-18-9-10.7(b)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the Executive Vice President for University Academic Affairs",
+            "unit_rationale": "Duty falls on the institution and concerns program discontinuation, an academic affairs function.",
+            "confidence": 0.88
+          },
+          "verdict": {
+            "obligation_id": "IC-21-18-9-10.7-eliminate-unapproved-programs",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.9,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.93. Filed to Office of the Executive Vice President for University Academic Affairs.",
+          "combined_confidence": 0.925,
+          "source_doc_id": "IC-21-18-9-10.7",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-18-9-10.7-monitor-graduate-averages",
+            "summary": "Maintain three-year rolling average graduate counts for every degree program so threshold status can be determined.",
+            "obligation_type": "recordkeeping",
+            "recurrence": "annual",
+            "verbatim_quote": "average number of students who graduate over the immediately preceding three (3) years is fewer than",
+            "citation": "IC 21-18-9-10.7(a)(1)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Institutional Analytics",
+            "unit_rationale": "The threshold test depends on graduate counts, which are produced and certified by institutional analytics.",
+            "confidence": 0.79
+          },
+          "verdict": {
+            "obligation_id": "IC-21-18-9-10.7-monitor-graduate-averages",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.62,
+            "objection": "The quoted span states the threshold test, not an express duty to maintain rolling averages. The monitoring duty is a reasonable operational inference but is not commanded by this text."
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "human_review",
+          "route_reason": "Verifier confidence 0.62 below 0.75.",
+          "combined_confidence": 0.7765,
+          "source_doc_id": "IC-21-18-9-10.7",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.3,
+        "extract_ms": 0.2,
+        "verify_route_ms": 0.9
+      }
+    },
+    {
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2",
+      "title": "Board of Trustees Tenure Review Criteria; Institutional Disciplinary Policy",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.98,
+        "rationale": "Directs the board of trustees of an institution to conduct five-year post-tenure reviews against enumerated criteria, adopt a disciplinary policy, and submit its process to the commission for higher education.",
+        "matched_topics": [
+          "faculty governance",
+          "post-tenure review",
+          "board of trustees"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-2-five-year-post-tenure-review",
+            "summary": "Review each tenured faculty member against the five statutory criteria within five years of tenure and every five years thereafter.",
+            "obligation_type": "process",
+            "recurrence": "multi_year",
+            "verbatim_quote": "Not later than five (5) years after the date that a faculty member is granted tenure by an institution and not later than every five (5) years thereafter, the board of trustees of an institution shall review and determine whether the faculty member has met the following criteria",
+            "citation": "IC 21-39.5-2-2(a)",
+            "deadline_text": "Not later than five (5) years after tenure is granted, and every five (5) years thereafter",
+            "first_due_date": null,
+            "responsible_unit": "Board of Trustees",
+            "unit_rationale": "The statute names 'the board of trustees of an institution' as the actor.",
+            "confidence": 0.95
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-2-five-year-post-tenure-review",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.96,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.97. Filed to Board of Trustees.",
+          "combined_confidence": 0.9695,
+          "source_doc_id": "IC-21-39.5-2-2",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-2-certify-determination",
+            "summary": "Certify the determination when the board finds a faculty member has met the criteria.",
+            "obligation_type": "recordkeeping",
+            "recurrence": "continuous",
+            "verbatim_quote": "If the board determines a faculty member meets the criteria, the board shall certify that determination.",
+            "citation": "IC 21-39.5-2-2(c)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Board of Trustees",
+            "unit_rationale": "Statute names the board as the certifying actor.",
+            "confidence": 0.9
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-2-certify-determination",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.93,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.94. Filed to Board of Trustees.",
+          "combined_confidence": 0.9435,
+          "source_doc_id": "IC-21-39.5-2-2",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-2-adopt-disciplinary-policy",
+            "summary": "Adopt a disciplinary policy specifying the actions available when a tenured faculty member fails to meet one or more criteria.",
+            "obligation_type": "policy",
+            "recurrence": "one_time",
+            "verbatim_quote": "The institution shall adopt a disciplinary policy establishing actions including termination, demotion, salary reduction, or other disciplinary action",
+            "citation": "IC 21-39.5-2-2(e)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "IU Human Resources",
+            "unit_rationale": "Duty is on 'the institution' and concerns employment discipline, which HR owns in partnership with academic affairs.",
+            "confidence": 0.91
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-2-adopt-disciplinary-policy",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.92,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.94. Filed to IU Human Resources.",
+          "combined_confidence": 0.9415,
+          "source_doc_id": "IC-21-39.5-2-2",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-2-review-renew-process-five-years",
+            "summary": "Review and renew or amend the post-tenure review process and any board-established criteria at least every five years.",
+            "obligation_type": "process",
+            "recurrence": "multi_year",
+            "verbatim_quote": "The board shall, at least every five (5) years, review and renew or amend the review process and any criteria established under subsection (a)(5).",
+            "citation": "IC 21-39.5-2-2(f)",
+            "deadline_text": "at least every five (5) years",
+            "first_due_date": null,
+            "responsible_unit": "Board of Trustees",
+            "unit_rationale": "Statute names the board.",
+            "confidence": 0.92
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-2-review-renew-process-five-years",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.94,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.95. Filed to Board of Trustees.",
+          "combined_confidence": 0.953,
+          "source_doc_id": "IC-21-39.5-2-2",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-2-submit-process-to-che",
+            "summary": "Submit the post-tenure review process and criteria to the Commission for Higher Education each time they are reviewed, renewed, or amended.",
+            "obligation_type": "report",
+            "recurrence": "continuous",
+            "verbatim_quote": "The board shall submit to the commission for higher education the process and criteria each time they are reviewed, renewed, or amended.",
+            "citation": "IC 21-39.5-2-2(g)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Board of Trustees",
+            "unit_rationale": "Statute names the board as the submitting party; the trigger is any revision of the process.",
+            "confidence": 0.93
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-2-submit-process-to-che",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.94,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "human_review",
+          "route_reason": "Policy gate: all 'report' obligations receive human confirmation before filing.",
+          "combined_confidence": 0.9555,
+          "source_doc_id": "IC-21-39.5-2-2",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.1,
+        "extract_ms": 0.3,
+        "verify_route_ms": 1.8
+      }
+    },
+    {
+      "doc_id": "IC-21-39.5-2-3",
+      "citation": "IC 21-39.5-2-3",
+      "title": "Institution Employment, Contract, Bonus, or Performance Assessment Review Criteria",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-3/",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.94,
+        "rationale": "Requires the institution to give substantial consideration to specified criteria before renewing faculty contracts, awarding bonuses, or completing performance assessments.",
+        "matched_topics": [
+          "faculty governance",
+          "employment review"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-3-substantial-consideration-in-reviews",
+            "summary": "Give substantial consideration to the section 2(a)(1)-(5) criteria before renewing a faculty contract, making a bonus decision, or completing a performance assessment.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "the institution must provide substantial consideration to performance regarding criteria in section 2(a)(1) through 2(a)(5) of this chapter",
+            "citation": "IC 21-39.5-2-3(b)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "IU Human Resources",
+            "unit_rationale": "Duty attaches to the institution at the point of contract renewal, bonus, and performance assessment, all HR-administered processes.",
+            "confidence": 0.89
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-3-substantial-consideration-in-reviews",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.88,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.92. Filed to IU Human Resources.",
+          "combined_confidence": 0.9185,
+          "source_doc_id": "IC-21-39.5-2-3",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-3/"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.1,
+        "extract_ms": 0.2,
+        "verify_route_ms": 0.3
+      }
+    },
+    {
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4",
+      "title": "Complaint Procedure; Institution Report; Commission for Higher Education Report",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.99,
+        "rationale": "Creates a cluster of institutional duties: establish and publicise a complaint procedure, refer and surface complaints, and file an annual report with the commission for higher education.",
+        "matched_topics": [
+          "complaint procedure",
+          "annual reporting",
+          "faculty governance"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-4-establish-complaint-procedure",
+            "summary": "Establish a procedure allowing students and employees to submit complaints that a faculty member is not meeting the statutory criteria.",
+            "obligation_type": "policy",
+            "recurrence": "one_time",
+            "verbatim_quote": "Establish a procedure that allows both students and employees to submit complaints that a faculty member or person described in section 3(a) of this chapter is not meeting the criteria described in section 2(a)(1) through 2(a)(5) of this chapter.",
+            "citation": "IC 21-39.5-2-4(a)(1)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "IU Human Resources",
+            "unit_rationale": "Complaint intake against employees is an HR-owned process at IU.",
+            "confidence": 0.94
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-4-establish-complaint-procedure",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.95,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.96. Filed to IU Human Resources.",
+          "combined_confidence": 0.9625,
+          "source_doc_id": "IC-21-39.5-2-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-4-publicize-procedure",
+            "summary": "Publicise the complaint procedure at student orientations, on the institution's website, and during employee onboarding.",
+            "obligation_type": "disclosure",
+            "recurrence": "continuous",
+            "verbatim_quote": "Provide information regarding the procedure established under subdivision (1): (A) at student orientations; (B) on the institution's website; and (C) during employee onboarding programs.",
+            "citation": "IC 21-39.5-2-4(a)(2)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness",
+            "unit_rationale": "Two of the three required channels are student orientation and the institutional website, both owned within student success.",
+            "confidence": 0.87
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-4-publicize-procedure",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.89,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.92. Filed to Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness.",
+          "combined_confidence": 0.918,
+          "source_doc_id": "IC-21-39.5-2-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-4-refer-complaints-to-hr",
+            "summary": "Refer submitted complaints to appropriate HR professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "Refer complaints submitted under subdivision (1) to appropriate human resource professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.",
+            "citation": "IC 21-39.5-2-4(a)(3)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "IU Human Resources",
+            "unit_rationale": "The statute names human resource professionals as the recipients.",
+            "confidence": 0.92
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-4-refer-complaints-to-hr",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.93,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.95. Filed to IU Human Resources.",
+          "combined_confidence": 0.9485,
+          "source_doc_id": "IC-21-39.5-2-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-4-make-complaints-available-to-trustees",
+            "summary": "Make submitted complaints and any relevant documents, summaries, or investigations available to the board of trustees.",
+            "obligation_type": "disclosure",
+            "recurrence": "continuous",
+            "verbatim_quote": "Make complaints submitted under subdivision (1) and any relevant documents, summaries, or investigations available to the board of trustees of the institution.",
+            "citation": "IC 21-39.5-2-4(a)(4)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the Vice President and General Counsel",
+            "unit_rationale": "Production of investigation materials to the board is typically routed through counsel.",
+            "confidence": 0.83
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-4-make-complaints-available-to-trustees",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": false,
+            "verifier_confidence": 0.71,
+            "objection": "The statute directs materials to the board of trustees and names no intermediary. Assigning ownership to General Counsel is plausible institutional practice but is not supported by the text; BOARD_OF_TRUSTEES or UNASSIGNED is better grounded."
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "human_review",
+          "route_reason": "Verifier raised an objection: The statute directs materials to the board of trustees and names no intermediary. Assigning ownership to General Counsel is plausible institutional practice but is not supported by the text; BOARD_OF_TRUSTEES or UNASSIGNED is better grounded.",
+          "combined_confidence": 0.6353,
+          "source_doc_id": "IC-21-39.5-2-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-4-annual-complaint-report-to-che",
+            "summary": "File an annual report with the Commission for Higher Education summarising the complaint procedure, how it was publicised, and complaint counts disaggregated by type.",
+            "obligation_type": "report",
+            "recurrence": "annual",
+            "verbatim_quote": "Submit a report to the commission for higher education not later than April 1, 2025, and not later than April 1 each year thereafter",
+            "citation": "IC 21-39.5-2-4(a)(5)",
+            "deadline_text": "not later than April 1, 2025, and not later than April 1 each year thereafter",
+            "first_due_date": "2025-04-01",
+            "responsible_unit": "University Effectiveness and Accreditation",
+            "unit_rationale": "External compliance reporting to the Commission is coordinated through University Effectiveness and Accreditation.",
+            "confidence": 0.96
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-4-annual-complaint-report-to-che",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.97,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "human_review",
+          "route_reason": "Policy gate: all 'report' obligations receive human confirmation before filing.",
+          "combined_confidence": 0.9765,
+          "source_doc_id": "IC-21-39.5-2-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-4-quarterly-complaint-dashboard",
+            "summary": "Publish a quarterly public dashboard of complaint volumes disaggregated by campus.",
+            "obligation_type": "disclosure",
+            "recurrence": "annual",
+            "verbatim_quote": "the institution shall publish a quarterly dashboard summarizing complaint volumes disaggregated by campus",
+            "citation": "IC 21-39.5-2-4(a)(6)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Institutional Analytics",
+            "unit_rationale": "Public dashboards of institutional metrics are produced by institutional analytics.",
+            "confidence": 0.71
+          },
+          "verdict": null,
+          "groundedness": {
+            "exact_match": false,
+            "fuzzy_score": 52.38,
+            "passed": false
+          },
+          "route": "rejected",
+          "route_reason": "Quote not found in source (fuzzy score 52.4 below threshold). Treated as hallucination.",
+          "combined_confidence": 0.6169,
+          "source_doc_id": "IC-21-39.5-2-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-2-4-anonymize-complaint-data",
+            "summary": "Exclude identifying information about complainants and about faculty members who are the subject of complaints from any institutional or commission report.",
+            "obligation_type": "prohibition",
+            "recurrence": "continuous",
+            "verbatim_quote": "An institution and the commission may not include identifying information regarding: (1) complainants; or (2) faculty members against whom complaints were submitted.",
+            "citation": "IC 21-39.5-2-4(c)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the Vice President and General Counsel",
+            "unit_rationale": "A statutory prohibition on disclosure of identifying information is a legal compliance constraint.",
+            "confidence": 0.95
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-2-4-anonymize-complaint-data",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.96,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "human_review",
+          "route_reason": "Policy gate: all 'prohibition' obligations receive human confirmation before filing.",
+          "combined_confidence": 0.9695,
+          "source_doc_id": "IC-21-39.5-2-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.1,
+        "extract_ms": 0.3,
+        "verify_route_ms": 3.4
+      }
+    },
+    {
+      "doc_id": "IC-21-39.5-3-2",
+      "citation": "IC 21-39.5-3-2",
+      "title": "New Student Information",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-3/section-21-39-5-3-2/",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.93,
+        "rationale": "Requires the institution to include specified free-expression and intellectual-diversity content in new student programming.",
+        "matched_topics": [
+          "new student programming",
+          "student orientation"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "IC-21-39.5-3-2-new-student-programming-content",
+            "summary": "Include content on free inquiry, free expression, intellectual diversity, and appropriate responses to offensive speech in programming for new students.",
+            "obligation_type": "disclosure",
+            "recurrence": "continuous",
+            "verbatim_quote": "An institution shall include the following information in the institution's programming for new students",
+            "citation": "IC 21-39.5-3-2",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness",
+            "unit_rationale": "New student programming is delivered by student success and orientation units.",
+            "confidence": 0.91
+          },
+          "verdict": {
+            "obligation_id": "IC-21-39.5-3-2-new-student-programming-content",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.93,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.95. Filed to Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness.",
+          "combined_confidence": 0.946,
+          "source_doc_id": "IC-21-39.5-3-2",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-3/section-21-39-5-3-2/"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.1,
+        "extract_ms": 0.2,
+        "verify_route_ms": 0.3
+      }
+    },
+    {
+      "doc_id": "IC-21-42-3-5",
+      "citation": "IC 21-42-3-5",
+      "title": "Indiana College Core",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.96,
+        "rationale": "Governs how a receiving state educational institution must treat the Indiana college core and award transfer credit, constraining registrar practice directly.",
+        "matched_topics": [
+          "transfer credit",
+          "Indiana college core",
+          "registrar"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "IC-21-42-3-5-honor-completed-college-core",
+            "summary": "Do not require a transfer student who has completed the Indiana college core to take additional college core courses, regardless of associate degree status or delivery method.",
+            "obligation_type": "prohibition",
+            "recurrence": "continuous",
+            "verbatim_quote": "may not be required to complete additional courses in the Indiana college core at the state educational institution to which the individual transfers",
+            "citation": "IC 21-42-3-5(a)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the University Registrar",
+            "unit_rationale": "Application of transfer credit and core completion is administered by the registrar.",
+            "confidence": 0.9
+          },
+          "verdict": {
+            "obligation_id": "IC-21-42-3-5-honor-completed-college-core",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.91,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "human_review",
+          "route_reason": "Policy gate: all 'prohibition' obligations receive human confirmation before filing.",
+          "combined_confidence": 0.9345,
+          "source_doc_id": "IC-21-42-3-5",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-42-3-5-award-credit-per-core-transfer-library",
+            "summary": "Award credit for satisfactorily completed courses based on the course-to-course equivalencies in the core transfer library.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "The state educational institution to which the individual has transferred shall award credit to the individual for courses the individual has satisfactorily completed, based on the course to course equivalencies of the core transfer library established under IC 21-42-5.",
+            "citation": "IC 21-42-3-5(b)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the University Registrar",
+            "unit_rationale": "Statute places the duty on the receiving institution; credit award is a registrar function.",
+            "confidence": 0.93
+          },
+          "verdict": {
+            "obligation_id": "IC-21-42-3-5-award-credit-per-core-transfer-library",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.94,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.96. Filed to Office of the University Registrar.",
+          "combined_confidence": 0.9555,
+          "source_doc_id": "IC-21-42-3-5",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-42-3-5-thirty-credit-gen-ed-associate",
+            "summary": "Treat an admitted holder of a Commission-approved associate of arts or science degree as having met at least 30 semester credit hours of general education requirements.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "is considered to have met at least thirty (30) semester credit hours of the state educational institution's general education requirement",
+            "citation": "IC 21-42-3-5(c)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the University Registrar",
+            "unit_rationale": "General education requirement satisfaction is recorded by the registrar.",
+            "confidence": 0.88
+          },
+          "verdict": {
+            "obligation_id": "IC-21-42-3-5-thirty-credit-gen-ed-associate",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.9,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.93. Filed to Office of the University Registrar.",
+          "combined_confidence": 0.925,
+          "source_doc_id": "IC-21-42-3-5",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.1,
+        "extract_ms": 0.2,
+        "verify_route_ms": 0.8
+      }
+    },
+    {
+      "doc_id": "IC-21-42-5-4",
+      "citation": "IC 21-42-5-4",
+      "title": "Core Transfer Library; Principles",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-5/section-21-42-5-4/",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.95,
+        "rationale": "Names Indiana University explicitly and requires it to identify transfer equivalents that apply consistently across all regional campuses in the system.",
+        "matched_topics": [
+          "transfer credit",
+          "core transfer library",
+          "regional campuses"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses",
+            "summary": "Identify transfer equivalents so that a core transfer library course accepted by one IU regional campus is accepted by all other regional campuses offering the same equivalent course.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "Indiana University and Purdue University must identify transfer equivalents so that a course accepted by one (1) regional campus is accepted by all other regional campuses that offer the same transfer equivalent course",
+            "citation": "IC 21-42-5-4(4)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the University Registrar",
+            "unit_rationale": "The statute names Indiana University directly; equivalency identification is a registrar function.",
+            "confidence": 0.94
+          },
+          "verdict": {
+            "obligation_id": "IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.95,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.96. Filed to Office of the University Registrar.",
+          "combined_confidence": 0.9625,
+          "source_doc_id": "IC-21-42-5-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-5/section-21-42-5-4/"
+        },
+        {
+          "obligation": {
+            "obligation_id": "IC-21-42-5-4-system-wide-course-equivalence",
+            "summary": "Ensure equivalent courses, including those sharing a course number and title, count identically at every campus in the IU system where offered.",
+            "obligation_type": "process",
+            "recurrence": "continuous",
+            "verbatim_quote": "Within the Indiana University system and Purdue University system, equivalent courses, including courses with the same course number and title, must count in the same way at all campuses within the system where the course is offered.",
+            "citation": "IC 21-42-5-4(5)",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Office of the University Registrar",
+            "unit_rationale": "Statute names the Indiana University system; course application rules are registrar-administered.",
+            "confidence": 0.92
+          },
+          "verdict": {
+            "obligation_id": "IC-21-42-5-4-system-wide-course-equivalence",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.93,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.95. Filed to Office of the University Registrar.",
+          "combined_confidence": 0.9485,
+          "source_doc_id": "IC-21-42-5-4",
+          "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-5/section-21-42-5-4/"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.1,
+        "extract_ms": 0.2,
+        "verify_route_ms": 0.7
+      }
+    },
+    {
+      "doc_id": "CHE-HEA1001-GUIDANCE",
+      "citation": "CHE Guidance, HEA 1001-2025 Degree Program Thresholds (v1.0, 06.13.25)",
+      "title": "Approval to Continue Under-Threshold Degree Programs; Commission Guidance and FAQ",
+      "source_url": "https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf",
+      "triage": {
+        "is_relevant": true,
+        "confidence": 0.97,
+        "rationale": "Commission guidance implementing IC 21-18-9-10.7; specifies the metrics, narrative submissions, and implementation timeline institutions must meet.",
+        "matched_topics": [
+          "degree programs",
+          "commission submission",
+          "program thresholds"
+        ]
+      },
+      "routed_obligations": [
+        {
+          "obligation": {
+            "obligation_id": "CHE-HEA1001-submit-program-metrics",
+            "summary": "Submit to the Commission the Replacement Ratio, Credit Hour Production Ratio, Viability Index, three-year graduate averages, a 250-word Program Overview, and a 500-word Rationale to Continue.",
+            "obligation_type": "report",
+            "recurrence": "one_time",
+            "verbatim_quote": "Institutions must provide to the Commission the Replacement Ratio for all degree programs, the Credit Hour Production Ratio for undergraduate programs only, the Viability Index for undergraduate programs, three-year average graduate counts for under-threshold programs, a Program Overview limited to 250 words, and a Rationale to Continue limited to 500 words.",
+            "citation": "CHE Guidance, HEA 1001-2025",
+            "deadline_text": null,
+            "first_due_date": null,
+            "responsible_unit": "Institutional Analytics",
+            "unit_rationale": "The required submissions are ratio and index metrics computed from institutional data.",
+            "confidence": 0.93
+          },
+          "verdict": {
+            "obligation_id": "CHE-HEA1001-submit-program-metrics",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.94,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "human_review",
+          "route_reason": "Policy gate: all 'report' obligations receive human confirmation before filing.",
+          "combined_confidence": 0.9555,
+          "source_doc_id": "CHE-HEA1001-GUIDANCE",
+          "source_url": "https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf"
+        },
+        {
+          "obligation": {
+            "obligation_id": "CHE-HEA1001-implement-suspensions-before-ay2627",
+            "summary": "Implement any approved program suspensions or mergers before academic year 2026-2027.",
+            "obligation_type": "process",
+            "recurrence": "one_time",
+            "verbatim_quote": "Any approved suspensions or mergers must be implemented before academic year 2026-2027.",
+            "citation": "CHE Guidance, HEA 1001-2025",
+            "deadline_text": "before academic year 2026-2027",
+            "first_due_date": null,
+            "responsible_unit": "Office of the Executive Vice President for University Academic Affairs",
+            "unit_rationale": "Program suspension and merger execution is an academic affairs responsibility.",
+            "confidence": 0.86
+          },
+          "verdict": {
+            "obligation_id": "CHE-HEA1001-implement-suspensions-before-ay2627",
+            "quote_is_grounded": true,
+            "summary_is_faithful": true,
+            "deadline_is_correct": true,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.88,
+            "objection": null
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "auto_file",
+          "route_reason": "All checks passed; combined confidence 0.91. Filed to Office of the Executive Vice President for University Academic Affairs.",
+          "combined_confidence": 0.911,
+          "source_doc_id": "CHE-HEA1001-GUIDANCE",
+          "source_url": "https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf"
+        },
+        {
+          "obligation": {
+            "obligation_id": "CHE-HEA1001-preliminary-list-response",
+            "summary": "Respond to the Commission's preliminary under-threshold program list within 30 days of receipt.",
+            "obligation_type": "report",
+            "recurrence": "one_time",
+            "verbatim_quote": "In mid-to-late July the Commission will provide institutions a preliminary list of under-threshold programs.",
+            "citation": "CHE Guidance, HEA 1001-2025",
+            "deadline_text": "within 30 days of receipt",
+            "first_due_date": null,
+            "responsible_unit": "Office of the Executive Vice President for University Academic Affairs",
+            "unit_rationale": "Institutional response to the preliminary list would be coordinated by academic affairs.",
+            "confidence": 0.68
+          },
+          "verdict": {
+            "obligation_id": "CHE-HEA1001-preliminary-list-response",
+            "quote_is_grounded": true,
+            "summary_is_faithful": false,
+            "deadline_is_correct": false,
+            "unit_is_defensible": true,
+            "verifier_confidence": 0.35,
+            "objection": "The source says only that the Commission will provide a preliminary list in mid-to-late July. It states no institutional response window. The '30 days of receipt' deadline in the summary and deadline_text appears nowhere in the source text."
+          },
+          "groundedness": {
+            "exact_match": true,
+            "fuzzy_score": 100.0,
+            "passed": true
+          },
+          "route": "rejected",
+          "route_reason": "Summary misstates the quoted duty: The source says only that the Commission will provide a preliminary list in mid-to-late July. It states no institutional response window. The '30 days of receipt' deadline in the summary and deadline_text appears nowhere in the source text.",
+          "combined_confidence": 0.533,
+          "source_doc_id": "CHE-HEA1001-GUIDANCE",
+          "source_url": "https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf"
+        }
+      ],
+      "skipped_reason": null,
+      "stage_timings_ms": {
+        "triage_ms": 0.1,
+        "extract_ms": 0.2,
+        "verify_route_ms": 0.9
+      }
+    },
+    {
+      "doc_id": "NEG-CONTROL-01",
+      "citation": "Synthetic distractor (not real statute)",
+      "title": "Negative control: agricultural equipment registration",
+      "source_url": null,
+      "triage": {
+        "is_relevant": false,
+        "confidence": 0.96,
+        "rationale": "Concerns registration of agricultural implements with the bureau of motor vehicles and county highway mileage reporting. No duty attaches to a state educational institution.",
+        "matched_topics": []
+      },
+      "routed_obligations": [],
+      "skipped_reason": "Triaged as not relevant (confidence 0.96): Concerns registration of agricultural implements with the bureau of motor vehicles and county highway mileage reporting. No duty attaches to a state educational institution.",
+      "stage_timings_ms": {
+        "triage_ms": 0.2
+      }
+    },
+    {
+      "doc_id": "NEG-CONTROL-02",
+      "citation": "Synthetic distractor (not real statute)",
+      "title": "Negative control: municipal water utility rate filings",
+      "source_url": null,
+      "triage": {
+        "is_relevant": false,
+        "confidence": 0.97,
+        "rationale": "Concerns rate schedule filings by municipally owned water utilities before the utility regulatory commission. No institutional duty.",
+        "matched_topics": []
+      },
+      "routed_obligations": [],
+      "skipped_reason": "Triaged as not relevant (confidence 0.97): Concerns rate schedule filings by municipally owned water utilities before the utility regulatory commission. No institutional duty.",
+      "stage_timings_ms": {
+        "triage_ms": 0.2
+      }
+    }
+  ]
+}

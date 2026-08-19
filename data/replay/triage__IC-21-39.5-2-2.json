@@ -1,0 +1,15 @@
+{
+  "key": "triage__IC-21-39.5-2-2",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.98,
+    "rationale": "Directs the board of trustees of an institution to conduct five-year post-tenure reviews against enumerated criteria, adopt a disciplinary policy, and submit its process to the commission for higher education.",
+    "matched_topics": [
+      "faculty governance",
+      "post-tenure review",
+      "board of trustees"
+    ]
+  }
+}

@@ -1,0 +1,2261 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LegisWatch — statutory obligation review queue</title>
+<style>
+:root {
+  color-scheme: light;
+  --surface-0: #f6f5f2;
+  --surface-1: #fcfcfb;
+  --surface-2: #f0efec;
+  --border:    #e2e0da;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #83817a;
+  --series-1: #2a78d6;
+  --good:     #0ca30c;
+  --warning:  #fab219;
+  --critical: #d03b3b;
+  --quote-bg: #f4f6f9;
+}
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    color-scheme: dark;
+    --surface-0: #121211;
+    --surface-1: #1a1a19;
+    --surface-2: #232322;
+    --border:    #383835;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #8e8d84;
+    --series-1: #3987e5;
+    --quote-bg: #1f242b;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: #121211; --surface-1: #1a1a19; --surface-2: #232322;
+  --border: #383835;
+  --text-primary: #ffffff; --text-secondary: #c3c2b7; --text-muted: #8e8d84;
+  --series-1: #3987e5; --quote-bg: #1f242b;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; padding: 0 0 64px;
+  background: var(--surface-0); color: var(--text-primary);
+  font: 15px/1.55 ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+header.top {
+  border-bottom: 1px solid var(--border); background: var(--surface-1);
+  padding: 28px 0 22px; margin-bottom: 28px;
+}
+h1 { margin: 0 0 4px; font-size: 25px; letter-spacing: -0.02em; font-weight: 620; }
+.sub { color: var(--text-secondary); font-size: 14px; margin: 0; }
+.runmeta {
+  margin-top: 14px; font-size: 12.5px; color: var(--text-muted);
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+.theme-toggle {
+  float: right; background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--text-secondary); border-radius: 7px; padding: 6px 11px;
+  font-size: 12.5px; cursor: pointer;
+}
+
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.07em;
+     color: var(--text-muted); font-weight: 600; margin: 34px 0 14px; }
+
+/* --- stat tiles: the headline numbers are numbers, not a chart --- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 12px; }
+.tile {
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 11px; padding: 15px 17px;
+}
+.tile .val { font-size: 30px; font-weight: 640; letter-spacing: -0.025em; line-height: 1.1; }
+.tile .lbl { font-size: 12.5px; color: var(--text-secondary); margin-top: 3px; }
+.tile .note { font-size: 11.5px; color: var(--text-muted); margin-top: 5px; }
+.tile.status { display: flex; gap: 11px; align-items: flex-start; }
+.dot { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; margin-top: 11px; }
+.dot.good { background: var(--good); }
+.dot.warning { background: var(--warning); }
+.dot.critical { background: var(--critical); }
+
+/* --- single-series horizontal bar --- */
+.chart { background: var(--surface-1); border: 1px solid var(--border);
+         border-radius: 11px; padding: 20px 22px; }
+.brow { display: grid; grid-template-columns: 250px 1fr 34px; gap: 12px;
+        align-items: center; margin-bottom: 9px; }
+.brow .name { font-size: 12.5px; color: var(--text-secondary); text-align: right;
+              overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.btrack { height: 15px; position: relative; }
+.bfill { height: 15px; background: var(--series-1);
+         border-radius: 0 4px 4px 0; transition: opacity .12s; }
+.bfill:hover { opacity: .82; }
+.brow .num { font-size: 12.5px; color: var(--text-secondary);
+             font-variant-numeric: tabular-nums; }
+
+/* --- filters --- */
+.filters { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+.chip {
+  background: var(--surface-1); border: 1px solid var(--border); color: var(--text-secondary);
+  border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer;
+}
+.chip[aria-pressed="true"] {
+  background: var(--series-1); border-color: var(--series-1); color: #fff; font-weight: 550;
+}
+select {
+  background: var(--surface-1); border: 1px solid var(--border); color: var(--text-primary);
+  border-radius: 7px; padding: 6px 10px; font-size: 13px; max-width: 340px;
+}
+
+/* --- obligation cards --- */
+.card {
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-left-width: 3px; border-radius: 10px; padding: 15px 17px; margin-bottom: 11px;
+}
+.card.auto_file { border-left-color: var(--good); }
+.card.human_review { border-left-color: var(--warning); }
+.card.rejected { border-left-color: var(--critical); }
+
+.card .hd { display: flex; justify-content: space-between; gap: 16px;
+            align-items: flex-start; margin-bottom: 8px; }
+.card .summ { font-size: 14.5px; font-weight: 560; line-height: 1.45; }
+.badge {
+  flex: 0 0 auto; font-size: 11px; font-weight: 620; letter-spacing: .03em;
+  padding: 3px 9px; border-radius: 5px; white-space: nowrap;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary);
+}
+.meta { display: flex; flex-wrap: wrap; gap: 6px; margin: 9px 0; }
+.pill {
+  font-size: 11.5px; background: var(--surface-2); color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: 5px; padding: 2px 8px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+blockquote {
+  margin: 10px 0 0; padding: 10px 13px; background: var(--quote-bg);
+  border-left: 2px solid var(--series-1); border-radius: 0 6px 6px 0;
+  font-size: 13px; color: var(--text-secondary); font-style: italic; line-height: 1.5;
+}
+.reason { margin-top: 9px; font-size: 12.5px; color: var(--text-muted); }
+.reason b { color: var(--text-secondary); font-weight: 600; }
+.actions { margin-top: 11px; display: flex; gap: 7px; align-items: center; }
+.btn {
+  font-size: 12.5px; padding: 5px 12px; border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface-2); color: var(--text-secondary);
+}
+.btn.primary { background: var(--series-1); border-color: var(--series-1); color: #fff; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+a { color: var(--series-1); }
+
+/* --- analyst review panel --- */
+.review {
+  margin-top: 12px; padding: 13px 15px; border: 1px solid var(--border);
+  border-radius: 9px; background: var(--surface-2);
+}
+.review.hidden { display: none; }
+.review label {
+  display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--text-muted); font-weight: 600; margin: 9px 0 4px;
+}
+.review label:first-child { margin-top: 0; }
+.review select, .review textarea, .review input[type=text] {
+  width: 100%; background: var(--surface-1); border: 1px solid var(--border);
+  color: var(--text-primary); border-radius: 6px; padding: 7px 9px;
+  font-size: 13px; font-family: inherit;
+}
+.review textarea { min-height: 62px; resize: vertical; }
+.review .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.review .hint { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+.review .err { font-size: 12px; color: var(--critical); margin-top: 7px; display: none; }
+.review .fallback {
+  display: none; margin-top: 10px; padding: 9px 11px; background: var(--quote-bg);
+  border-radius: 6px; font-family: ui-monospace, Menlo, monospace; font-size: 11px;
+  color: var(--text-secondary); white-space: pre-wrap; word-break: break-all;
+}
+.review .ok { display: none; margin-top: 9px; font-size: 12.5px; color: var(--good); }
+
+/* --- decision history on a card --- */
+.history { margin-top: 12px; border-top: 1px solid var(--border); padding-top: 11px; }
+.history h5 {
+  margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--text-muted); font-weight: 600;
+}
+.hentry { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 9px; }
+.hentry .hhead { font-weight: 600; color: var(--text-primary); }
+.hentry .hcomment { font-style: italic; margin-top: 2px; }
+.hentry .htrace { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+.prov {
+  display: inline-block; font-size: 10.5px; font-family: ui-monospace, Menlo, monospace;
+  padding: 2px 7px; border-radius: 4px; background: var(--quote-bg);
+  color: var(--text-secondary); border: 1px solid var(--border);
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border);
+         vertical-align: top; }
+th { color: var(--text-muted); font-size: 11.5px; text-transform: uppercase;
+     letter-spacing: .05em; font-weight: 600; }
+details.tableview { margin-top: 14px; }
+details.tableview summary { cursor: pointer; color: var(--text-secondary); font-size: 13px; }
+
+.callout {
+  background: var(--surface-1); border: 1px solid var(--border);
+  border-left: 3px solid var(--critical); border-radius: 10px;
+  padding: 15px 17px; margin-bottom: 11px;
+}
+.callout h3 { margin: 0 0 6px; font-size: 14px; }
+.hidden { display: none !important; }
+footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border);
+         color: var(--text-muted); font-size: 12.5px; }
+</style>
+</head><body>
+
+<header class="top"><div class="wrap">
+  <button class="theme-toggle" id="tt">Toggle theme</button>
+  <h1>LegisWatch</h1>
+  <p class="sub">Statutory obligations extracted from Indiana legislative and regulatory text,
+     verified against source, and routed to an owning office.</p>
+  <div class="runmeta">run-20260819-211454-61d3b2 · 2026-08-19T21:14:54+00:00 ·
+     replay/replay-cache</div>
+</div></header>
+
+<div class="wrap">
+
+  <h2>Run summary</h2>
+  
+    <div class="tiles">
+      <div class="tile">
+        <div class="val">10</div>
+        <div class="lbl">Documents ingested</div>
+        <div class="note">2 filtered out before extraction</div>
+      </div>
+      <div class="tile">
+        <div class="val">25</div>
+        <div class="lbl">Obligations extracted</div>
+        <div class="note">from 8 relevant documents</div>
+      </div>
+      <div class="tile status">
+        <span class="dot good"></span>
+        <div><div class="val">16</div>
+        <div class="lbl">Auto-filed</div>
+        <div class="note">64% of extractions</div></div>
+      </div>
+      <div class="tile status">
+        <span class="dot warning"></span>
+        <div><div class="val">7</div>
+        <div class="lbl">Queued for review</div>
+        <div class="note">analyst confirmation required</div></div>
+      </div>
+      <div class="tile status">
+        <span class="dot critical"></span>
+        <div><div class="val">2</div>
+        <div class="lbl">Rejected by guardrails</div>
+        <div class="note">never reached a human queue</div></div>
+      </div>
+      <div class="tile">
+        <div class="val">36ms</div>
+        <div class="lbl">Wall clock</div>
+        <div class="note">replay · replay-cache</div>
+      </div>
+    </div>
+
+  <h2>Where the work lands</h2>
+  <div class="chart">
+    <p class="sub" style="margin:0 0 15px;font-size:13px">
+      Obligations by owning office. This is the number that makes the case: the
+      pipeline does not just find duties, it tells you whose desk each one belongs on.</p>
+    <div class="brow">
+              <div class="name" title="Office of the University Registrar">Office of the University Registrar</div>
+              <div class="btrack"><div class="bfill" style="width:100.0%"
+                   title="Office of the University Registrar: 5"></div></div>
+              <div class="num">5</div>
+            </div><div class="brow">
+              <div class="name" title="Office of the Executive Vice President for University Academic Affairs">Office of the Executive Vice President for University Academic Affairs</div>
+              <div class="btrack"><div class="bfill" style="width:80.0%"
+                   title="Office of the Executive Vice President for University Academic Affairs: 4"></div></div>
+              <div class="num">4</div>
+            </div><div class="brow">
+              <div class="name" title="Board of Trustees">Board of Trustees</div>
+              <div class="btrack"><div class="bfill" style="width:80.0%"
+                   title="Board of Trustees: 4"></div></div>
+              <div class="num">4</div>
+            </div><div class="brow">
+              <div class="name" title="IU Human Resources">IU Human Resources</div>
+              <div class="btrack"><div class="bfill" style="width:80.0%"
+                   title="IU Human Resources: 4"></div></div>
+              <div class="num">4</div>
+            </div><div class="brow">
+              <div class="name" title="Institutional Analytics">Institutional Analytics</div>
+              <div class="btrack"><div class="bfill" style="width:60.0%"
+                   title="Institutional Analytics: 3"></div></div>
+              <div class="num">3</div>
+            </div><div class="brow">
+              <div class="name" title="Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</div>
+              <div class="btrack"><div class="bfill" style="width:40.0%"
+                   title="Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness: 2"></div></div>
+              <div class="num">2</div>
+            </div><div class="brow">
+              <div class="name" title="Office of the Vice President and General Counsel">Office of the Vice President and General Counsel</div>
+              <div class="btrack"><div class="bfill" style="width:40.0%"
+                   title="Office of the Vice President and General Counsel: 2"></div></div>
+              <div class="num">2</div>
+            </div><div class="brow">
+              <div class="name" title="University Effectiveness and Accreditation">University Effectiveness and Accreditation</div>
+              <div class="btrack"><div class="bfill" style="width:20.0%"
+                   title="University Effectiveness and Accreditation: 1"></div></div>
+              <div class="num">1</div>
+            </div>
+  </div>
+
+  <h2>Guardrails that fired</h2><div class="callout">
+              <h3>✕ IC-21-39.5-2-4-quarterly-complaint-dashboard</h3>
+              <div class="reason"><b>Claimed:</b> Publish a quarterly public dashboard of complaint volumes disaggregated by campus.</div>
+              <div class="reason"><b>Why it was stopped:</b> Quote not found in source (fuzzy score 52.4 below threshold). Treated as hallucination.</div>
+              <div class="meta">
+                <span class="pill">exact_match: false</span>
+                <span class="pill">fuzzy: 52.4</span>
+                <span class="pill">self-reported confidence: 0.71</span>
+              </div>
+              <blockquote>the institution shall publish a quarterly dashboard summarizing complaint volumes disaggregated by campus</blockquote>
+            </div><div class="callout">
+              <h3>✕ CHE-HEA1001-preliminary-list-response</h3>
+              <div class="reason"><b>Claimed:</b> Respond to the Commission&#x27;s preliminary under-threshold program list within 30 days of receipt.</div>
+              <div class="reason"><b>Why it was stopped:</b> Summary misstates the quoted duty: The source says only that the Commission will provide a preliminary list in mid-to-late July. It states no institutional response window. The &#x27;30 days of receipt&#x27; deadline in the summary and deadline_text appears nowhere in the source text.</div>
+              <div class="meta">
+                <span class="pill">exact_match: true</span>
+                <span class="pill">fuzzy: 100.0</span>
+                <span class="pill">self-reported confidence: 0.68</span>
+              </div>
+              <blockquote>In mid-to-late July the Commission will provide institutions a preliminary list of under-threshold programs.</blockquote>
+            </div>
+
+  <h2>Review queue</h2>
+  <p class="sub" style="margin:0 0 14px;font-size:13px">Counts above are the pipeline's own output. <b>4</b> obligation(s) have since been reviewed by an analyst; the queue below shows current state, with every agent decision preserved in each card's history.</p>
+  <div class="filters">
+    <button class="chip" data-f="all" aria-pressed="true">All (25)</button>
+    <button class="chip" data-f="human_review" aria-pressed="false">▲ Needs review (6)</button>
+    <button class="chip" data-f="auto_file" aria-pressed="false">● Auto-filed (18)</button>
+    <button class="chip" data-f="rejected" aria-pressed="false">✕ Rejected (1)</button>
+    <select id="unitf"><option value="all">All offices</option><option value="Office of the University Registrar">Office of the University Registrar (5)</option><option value="Office of the Executive Vice President for University Academic Affairs">Office of the Executive Vice President for University Academic Affairs (4)</option><option value="Board of Trustees">Board of Trustees (4)</option><option value="IU Human Resources">IU Human Resources (4)</option><option value="Institutional Analytics">Institutional Analytics (3)</option><option value="Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness (2)</option><option value="Office of the Vice President and General Counsel">Office of the Vice President and General Counsel (2)</option><option value="University Effectiveness and Accreditation">University Effectiveness and Accreditation (1)</option></select>
+  </div>
+  <div id="cards">
+        <article class="card human_review" data-route="human_review"
+                 data-unit="University Effectiveness and Accreditation" data-oid="IC-21-39.5-2-4-annual-complaint-report-to-che">
+          <div class="hd">
+            <div class="summ">File an annual report with the Commission for Higher Education summarising the complaint procedure, how it was publicised, and complaint counts disaggregated by type.</div>
+            <span class="badge">▲ NEEDS REVIEW</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-4(a)(5)</span>
+            <span class="pill">report</span>
+            <span class="pill">annual</span>
+            <span class="pill">due: not later than April 1, 2025, and not later than April 1 each year thereafter</span>
+            <span class="pill">confidence 0.98</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> University Effectiveness and Accreditation — External compliance reporting to the Commission is coordinated through University Effectiveness and Accreditation.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> Policy gate: all &#x27;report&#x27; obligations receive human confirmation before filing.</div>
+          <blockquote>Submit a report to the commission for higher education not later than April 1, 2025, and not later than April 1 each year thereafter</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-4-annual-complaint-report-to-che">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-4-annual-complaint-report-to-che">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-4-annual-complaint-report-to-che">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-4-annual-complaint-report-to-che">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card human_review" data-route="human_review"
+                 data-unit="Office of the Vice President and General Counsel" data-oid="IC-21-39.5-2-4-anonymize-complaint-data">
+          <div class="hd">
+            <div class="summ">Exclude identifying information about complainants and about faculty members who are the subject of complaints from any institutional or commission report.</div>
+            <span class="badge">▲ NEEDS REVIEW</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-4(c)</span>
+            <span class="pill">prohibition</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.97</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Vice President and General Counsel — A statutory prohibition on disclosure of identifying information is a legal compliance constraint.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> Policy gate: all &#x27;prohibition&#x27; obligations receive human confirmation before filing.</div>
+          <blockquote>An institution and the commission may not include identifying information regarding: (1) complainants; or (2) faculty members against whom complaints were submitted.</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-4-anonymize-complaint-data">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-4-anonymize-complaint-data">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-4-anonymize-complaint-data">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-4-anonymize-complaint-data">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card human_review" data-route="human_review"
+                 data-unit="Board of Trustees" data-oid="IC-21-39.5-2-2-submit-process-to-che">
+          <div class="hd">
+            <div class="summ">Submit the post-tenure review process and criteria to the Commission for Higher Education each time they are reviewed, renewed, or amended.</div>
+            <span class="badge">▲ NEEDS REVIEW</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-2(g)</span>
+            <span class="pill">report</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.96</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Board of Trustees — Statute names the board as the submitting party; the trigger is any revision of the process.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> Policy gate: all &#x27;report&#x27; obligations receive human confirmation before filing.</div>
+          <blockquote>The board shall submit to the commission for higher education the process and criteria each time they are reviewed, renewed, or amended.</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-2
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-2-submit-process-to-che">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-2-submit-process-to-che">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-2-submit-process-to-che">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-2-submit-process-to-che">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card human_review" data-route="human_review"
+                 data-unit="Institutional Analytics" data-oid="CHE-HEA1001-submit-program-metrics">
+          <div class="hd">
+            <div class="summ">Submit to the Commission the Replacement Ratio, Credit Hour Production Ratio, Viability Index, three-year graduate averages, a 250-word Program Overview, and a 500-word Rationale to Continue.</div>
+            <span class="badge">▲ NEEDS REVIEW</span>
+          </div>
+          <div class="meta">
+            <span class="pill">CHE Guidance, HEA 1001-2025</span>
+            <span class="pill">report</span>
+            <span class="pill">one_time</span>
+            
+            <span class="pill">confidence 0.96</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Institutional Analytics — The required submissions are ratio and index metrics computed from institutional data.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> Policy gate: all &#x27;report&#x27; obligations receive human confirmation before filing.</div>
+          <blockquote>Institutions must provide to the Commission the Replacement Ratio for all degree programs, the Credit Hour Production Ratio for undergraduate programs only, the Viability Index for undergraduate programs, three-year average graduate counts for under-threshold programs, a Program Overview limited to 250 words, and a Rationale to Continue limited to 500 words.</blockquote>
+          <div class="reason">Grounded in CHE-HEA1001-GUIDANCE
+            (exact match: true) · <a href="https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="CHE-HEA1001-submit-program-metrics">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-CHE-HEA1001-submit-program-metrics">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="CHE-HEA1001-submit-program-metrics">Record decision</button>
+        <button class="btn js-cancel" data-oid="CHE-HEA1001-submit-program-metrics">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card human_review" data-route="human_review"
+                 data-unit="Office of the University Registrar" data-oid="IC-21-42-3-5-honor-completed-college-core">
+          <div class="hd">
+            <div class="summ">Do not require a transfer student who has completed the Indiana college core to take additional college core courses, regardless of associate degree status or delivery method.</div>
+            <span class="badge">▲ NEEDS REVIEW</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-42-3-5(a)</span>
+            <span class="pill">prohibition</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.93</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the University Registrar — Application of transfer credit and core completion is administered by the registrar.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> Policy gate: all &#x27;prohibition&#x27; obligations receive human confirmation before filing.</div>
+          <blockquote>may not be required to complete additional courses in the Indiana college core at the state educational institution to which the individual transfers</blockquote>
+          <div class="reason">Grounded in IC-21-42-3-5
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-42-3-5-honor-completed-college-core">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-42-3-5-honor-completed-college-core">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-42-3-5-honor-completed-college-core">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-42-3-5-honor-completed-college-core">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card human_review" data-route="human_review"
+                 data-unit="Office of the Executive Vice President for University Academic Affairs" data-oid="CHE-HEA1001-preliminary-list-response">
+          <div class="hd">
+            <div class="summ">Receive and act on the Commission&#x27;s preliminary list of under-threshold degree programs, expected mid-to-late July.</div>
+            <span class="badge">▲ NEEDS REVIEW</span>
+          </div>
+          <div class="meta">
+            <span class="pill">CHE Guidance, HEA 1001-2025</span>
+            <span class="pill">report</span>
+            <span class="pill">one_time</span>
+            
+            <span class="pill">confidence 0.53</span>
+            <span class="prov">decided by: analyst_corrected_agent_routed</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Executive Vice President for University Academic Affairs — Institutional response to the preliminary list would be coordinated by academic affairs.</div>
+          <div class="reason"><b>Agent originally:</b> rejected &middot; Office of the Executive Vice President for University Academic Affairs &mdash; superseded by analyst review below.</div>
+          <div class="reason"><b>Verifier objection:</b> The source says only that the Commission will provide a preliminary list in mid-to-late July. It states no institutional response window. The &#x27;30 days of receipt&#x27; deadline in the summary and deadline_text appears nowhere in the source text.</div>
+          <div class="reason"><b>Agent routing:</b> Summary misstates the quoted duty: The source says only that the Commission will provide a preliminary list in mid-to-late July. It states no institutional response window. The &#x27;30 days of receipt&#x27; deadline in the summary and deadline_text appears nowhere in the source text.</div>
+          <blockquote>In mid-to-late July the Commission will provide institutions a preliminary list of under-threshold programs.</blockquote>
+          <div class="reason">Grounded in CHE-HEA1001-GUIDANCE
+            (exact match: true) · <a href="https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf" target="_blank" rel="noopener">source</a></div>
+          <div class="history"><h5>Decision history (1)</h5><div class="hentry">
+              <div class="hhead">2026-08-19T21:14:52+00:00 · k.adams ·
+                REINSTATE</div>
+              <div>rejected → human_review</div>
+              <div class="hcomment">&ldquo;Verifier correctly caught the invented 30-day window, but the underlying duty is real and the quote is accurate. Removing the fabricated deadline rather than discarding the item.&rdquo;</div>
+              <div class="htrace">edited: deadline_text (cleared), summary</div><div class="htrace">Re-ran deterministic checks on analyst-corrected input: groundedness exact=True fuzzy=100.0 passed=True; prior verdict discarded as stale (it judged text the analyst has since changed); routed without a semantic verdict, which cannot auto-file; routing returned human_review (combined 0.84).</div>
+              <div class="htrace">dec-04fbb822326e</div></div></div>
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="CHE-HEA1001-preliminary-list-response">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-CHE-HEA1001-preliminary-list-response">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="CHE-HEA1001-preliminary-list-response">Record decision</button>
+        <button class="btn js-cancel" data-oid="CHE-HEA1001-preliminary-list-response">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card rejected" data-route="rejected"
+                 data-unit="Institutional Analytics" data-oid="IC-21-39.5-2-4-quarterly-complaint-dashboard">
+          <div class="hd">
+            <div class="summ">Publish a quarterly public dashboard of complaint volumes disaggregated by campus.</div>
+            <span class="badge">✕ REJECTED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-4(a)(6)</span>
+            <span class="pill">disclosure</span>
+            <span class="pill">annual</span>
+            
+            <span class="pill">confidence 0.62</span>
+            <span class="prov">decided by: analyst</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Institutional Analytics — Public dashboards of institutional metrics are produced by institutional analytics.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> Quote not found in source (fuzzy score 52.4 below threshold). Treated as hallucination.</div>
+          <blockquote>the institution shall publish a quarterly dashboard summarizing complaint volumes disaggregated by campus</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-4
+            (exact match: false) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/" target="_blank" rel="noopener">source</a></div>
+          <div class="history"><h5>Decision history (2)</h5><div class="hentry">
+              <div class="hhead">2026-08-19T21:14:52+00:00 · m.mendez ·
+                REINSTATE</div>
+              <div>rejected → rejected</div>
+              <div class="hcomment">&ldquo;Checking whether this duty exists anywhere in the chapter before we discard it.&rdquo;</div>
+              <div class="htrace">Re-ran deterministic checks on analyst-corrected input: groundedness exact=False fuzzy=52.4 passed=False; quote failed groundedness, prior verdict discarded; routing returned rejected (combined 0.62).</div>
+              <div class="htrace">dec-e8ade1fdc004</div></div><div class="hentry">
+              <div class="hhead">2026-08-19T21:14:53+00:00 · m.mendez ·
+                REJECT</div>
+              <div>rejected → rejected</div>
+              <div class="hcomment">&ldquo;Confirmed by hand against the full text of IC 21-39.5-2-4. No quarterly dashboard duty exists anywhere in the chapter. Correctly caught by the pipeline.&rdquo;</div>
+              
+              <div class="htrace">dec-71e5fbae3f92 · supersedes dec-e8ade1fdc004</div></div></div>
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-4-quarterly-complaint-dashboard">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-4-quarterly-complaint-dashboard">
+      <label>Action</label>
+      <select class="js-action"><option value="reinstate">Reinstate — correct and re-run the checks</option><option value="reroute">Force route — override the pipeline deliberately</option><option value="reject">Uphold rejection</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-4-quarterly-complaint-dashboard">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-4-quarterly-complaint-dashboard">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Board of Trustees" data-oid="IC-21-39.5-2-2-five-year-post-tenure-review">
+          <div class="hd">
+            <div class="summ">Review each tenured faculty member against the five statutory criteria within five years of tenure and every five years thereafter.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-2(a)</span>
+            <span class="pill">process</span>
+            <span class="pill">multi_year</span>
+            <span class="pill">due: Not later than five (5) years after tenure is granted, and every five (5) years thereafter</span>
+            <span class="pill">confidence 0.97</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Board of Trustees — The statute names &#x27;the board of trustees of an institution&#x27; as the actor.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.97. Filed to Board of Trustees.</div>
+          <blockquote>Not later than five (5) years after the date that a faculty member is granted tenure by an institution and not later than every five (5) years thereafter, the board of trustees of an institution shall review and determine whether the faculty member has met the following criteria</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-2
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-2-five-year-post-tenure-review">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-2-five-year-post-tenure-review">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-2-five-year-post-tenure-review">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-2-five-year-post-tenure-review">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="IU Human Resources" data-oid="IC-21-39.5-2-4-establish-complaint-procedure">
+          <div class="hd">
+            <div class="summ">Establish a procedure allowing students and employees to submit complaints that a faculty member is not meeting the statutory criteria.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-4(a)(1)</span>
+            <span class="pill">policy</span>
+            <span class="pill">one_time</span>
+            
+            <span class="pill">confidence 0.96</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> IU Human Resources — Complaint intake against employees is an HR-owned process at IU.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.96. Filed to IU Human Resources.</div>
+          <blockquote>Establish a procedure that allows both students and employees to submit complaints that a faculty member or person described in section 3(a) of this chapter is not meeting the criteria described in section 2(a)(1) through 2(a)(5) of this chapter.</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-4-establish-complaint-procedure">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-4-establish-complaint-procedure">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-4-establish-complaint-procedure">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-4-establish-complaint-procedure">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the University Registrar" data-oid="IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses">
+          <div class="hd">
+            <div class="summ">Identify transfer equivalents so that a core transfer library course accepted by one IU regional campus is accepted by all other regional campuses offering the same equivalent course.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-42-5-4(4)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.96</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the University Registrar — The statute names Indiana University directly; equivalency identification is a registrar function.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.96. Filed to Office of the University Registrar.</div>
+          <blockquote>Indiana University and Purdue University must identify transfer equivalents so that a course accepted by one (1) regional campus is accepted by all other regional campuses that offer the same transfer equivalent course</blockquote>
+          <div class="reason">Grounded in IC-21-42-5-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-42/chapter-5/section-21-42-5-4/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the University Registrar" data-oid="IC-21-42-3-5-award-credit-per-core-transfer-library">
+          <div class="hd">
+            <div class="summ">Award credit for satisfactorily completed courses based on the course-to-course equivalencies in the core transfer library.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-42-3-5(b)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.96</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the University Registrar — Statute places the duty on the receiving institution; credit award is a registrar function.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.96. Filed to Office of the University Registrar.</div>
+          <blockquote>The state educational institution to which the individual has transferred shall award credit to the individual for courses the individual has satisfactorily completed, based on the course to course equivalencies of the core transfer library established under IC 21-42-5.</blockquote>
+          <div class="reason">Grounded in IC-21-42-3-5
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-42-3-5-award-credit-per-core-transfer-library">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-42-3-5-award-credit-per-core-transfer-library">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-42-3-5-award-credit-per-core-transfer-library">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-42-3-5-award-credit-per-core-transfer-library">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Board of Trustees" data-oid="IC-21-39.5-2-2-review-renew-process-five-years">
+          <div class="hd">
+            <div class="summ">Review and renew or amend the post-tenure review process and any board-established criteria at least every five years.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-2(f)</span>
+            <span class="pill">process</span>
+            <span class="pill">multi_year</span>
+            <span class="pill">due: at least every five (5) years</span>
+            <span class="pill">confidence 0.95</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Board of Trustees — Statute names the board.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.95. Filed to Board of Trustees.</div>
+          <blockquote>The board shall, at least every five (5) years, review and renew or amend the review process and any criteria established under subsection (a)(5).</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-2
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-2-review-renew-process-five-years">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-2-review-renew-process-five-years">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-2-review-renew-process-five-years">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-2-review-renew-process-five-years">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the Executive Vice President for University Academic Affairs" data-oid="IC-21-18-9-10.7-request-approval-under-threshold">
+          <div class="hd">
+            <div class="summ">Request Commission for Higher Education approval to continue any degree program whose three-year average graduate count falls below the statutory threshold for its award level.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-18-9-10.7(a)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.95</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Executive Vice President for University Academic Affairs — The statute places the duty on the &#x27;state educational institution&#x27; and concerns continuation of academic degree programs, which sits with academic affairs.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.95. Filed to Office of the Executive Vice President for University Academic Affairs.</div>
+          <blockquote>the state educational institution must request approval from the commission to continue the degree program</blockquote>
+          <div class="reason">Grounded in IC-21-18-9-10.7
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-18-9-10.7-request-approval-under-threshold">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-18-9-10.7-request-approval-under-threshold">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-18-9-10.7-request-approval-under-threshold">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-18-9-10.7-request-approval-under-threshold">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="IU Human Resources" data-oid="IC-21-39.5-2-4-refer-complaints-to-hr">
+          <div class="hd">
+            <div class="summ">Refer submitted complaints to appropriate HR professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-4(a)(3)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.95</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> IU Human Resources — The statute names human resource professionals as the recipients.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.95. Filed to IU Human Resources.</div>
+          <blockquote>Refer complaints submitted under subdivision (1) to appropriate human resource professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-4-refer-complaints-to-hr">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-4-refer-complaints-to-hr">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-4-refer-complaints-to-hr">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-4-refer-complaints-to-hr">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the University Registrar" data-oid="IC-21-42-5-4-system-wide-course-equivalence">
+          <div class="hd">
+            <div class="summ">Ensure equivalent courses, including those sharing a course number and title, count identically at every campus in the IU system where offered.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-42-5-4(5)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.95</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the University Registrar — Statute names the Indiana University system; course application rules are registrar-administered.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.95. Filed to Office of the University Registrar.</div>
+          <blockquote>Within the Indiana University system and Purdue University system, equivalent courses, including courses with the same course number and title, must count in the same way at all campuses within the system where the course is offered.</blockquote>
+          <div class="reason">Grounded in IC-21-42-5-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-42/chapter-5/section-21-42-5-4/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-42-5-4-system-wide-course-equivalence">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-42-5-4-system-wide-course-equivalence">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-42-5-4-system-wide-course-equivalence">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-42-5-4-system-wide-course-equivalence">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness" data-oid="IC-21-39.5-3-2-new-student-programming-content">
+          <div class="hd">
+            <div class="summ">Include content on free inquiry, free expression, intellectual diversity, and appropriate responses to offensive speech in programming for new students.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-3-2</span>
+            <span class="pill">disclosure</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.95</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness — New student programming is delivered by student success and orientation units.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.95. Filed to Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness.</div>
+          <blockquote>An institution shall include the following information in the institution&#x27;s programming for new students</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-3-2
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-3/section-21-39-5-3-2/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-3-2-new-student-programming-content">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-3-2-new-student-programming-content">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-3-2-new-student-programming-content">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-3-2-new-student-programming-content">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Board of Trustees" data-oid="IC-21-39.5-2-2-certify-determination">
+          <div class="hd">
+            <div class="summ">Certify the determination when the board finds a faculty member has met the criteria.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-2(c)</span>
+            <span class="pill">recordkeeping</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.94</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Board of Trustees — Statute names the board as the certifying actor.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.94. Filed to Board of Trustees.</div>
+          <blockquote>If the board determines a faculty member meets the criteria, the board shall certify that determination.</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-2
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-2-certify-determination">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-2-certify-determination">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-2-certify-determination">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-2-certify-determination">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="IU Human Resources" data-oid="IC-21-39.5-2-2-adopt-disciplinary-policy">
+          <div class="hd">
+            <div class="summ">Adopt a disciplinary policy specifying the actions available when a tenured faculty member fails to meet one or more criteria.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-2(e)</span>
+            <span class="pill">policy</span>
+            <span class="pill">one_time</span>
+            
+            <span class="pill">confidence 0.94</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> IU Human Resources — Duty is on &#x27;the institution&#x27; and concerns employment discipline, which HR owns in partnership with academic affairs.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.94. Filed to IU Human Resources.</div>
+          <blockquote>The institution shall adopt a disciplinary policy establishing actions including termination, demotion, salary reduction, or other disciplinary action</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-2
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-2-adopt-disciplinary-policy">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-2-adopt-disciplinary-policy">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-2-adopt-disciplinary-policy">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-2-adopt-disciplinary-policy">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the Executive Vice President for University Academic Affairs" data-oid="IC-21-18-9-10.7-eliminate-unapproved-programs">
+          <div class="hd">
+            <div class="summ">Eliminate any under-threshold degree program, and the costs associated with it, where the Commission declines to approve continuation.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-18-9-10.7(b)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.93</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Executive Vice President for University Academic Affairs — Duty falls on the institution and concerns program discontinuation, an academic affairs function.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.93. Filed to Office of the Executive Vice President for University Academic Affairs.</div>
+          <blockquote>If the commission does not grant approval under subsection (a), the state educational institution must eliminate</blockquote>
+          <div class="reason">Grounded in IC-21-18-9-10.7
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-18-9-10.7-eliminate-unapproved-programs">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-18-9-10.7-eliminate-unapproved-programs">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-18-9-10.7-eliminate-unapproved-programs">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-18-9-10.7-eliminate-unapproved-programs">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the University Registrar" data-oid="IC-21-42-3-5-thirty-credit-gen-ed-associate">
+          <div class="hd">
+            <div class="summ">Treat an admitted holder of a Commission-approved associate of arts or science degree as having met at least 30 semester credit hours of general education requirements.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-42-3-5(c)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.93</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the University Registrar — General education requirement satisfaction is recorded by the registrar.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.93. Filed to Office of the University Registrar.</div>
+          <blockquote>is considered to have met at least thirty (30) semester credit hours of the state educational institution&#x27;s general education requirement</blockquote>
+          <div class="reason">Grounded in IC-21-42-3-5
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-42-3-5-thirty-credit-gen-ed-associate">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-42-3-5-thirty-credit-gen-ed-associate">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-42-3-5-thirty-credit-gen-ed-associate">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-42-3-5-thirty-credit-gen-ed-associate">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="IU Human Resources" data-oid="IC-21-39.5-2-3-substantial-consideration-in-reviews">
+          <div class="hd">
+            <div class="summ">Give substantial consideration to the section 2(a)(1)-(5) criteria before renewing a faculty contract, making a bonus decision, or completing a performance assessment.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-3(b)</span>
+            <span class="pill">process</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.92</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> IU Human Resources — Duty attaches to the institution at the point of contract renewal, bonus, and performance assessment, all HR-administered processes.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.92. Filed to IU Human Resources.</div>
+          <blockquote>the institution must provide substantial consideration to performance regarding criteria in section 2(a)(1) through 2(a)(5) of this chapter</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-3
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-3/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-3-substantial-consideration-in-reviews">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-3-substantial-consideration-in-reviews">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-3-substantial-consideration-in-reviews">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-3-substantial-consideration-in-reviews">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness" data-oid="IC-21-39.5-2-4-publicize-procedure">
+          <div class="hd">
+            <div class="summ">Publicise the complaint procedure at student orientations, on the institution&#x27;s website, and during employee onboarding.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-4(a)(2)</span>
+            <span class="pill">disclosure</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.92</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness — Two of the three required channels are student orientation and the institutional website, both owned within student success.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.92. Filed to Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness.</div>
+          <blockquote>Provide information regarding the procedure established under subdivision (1): (A) at student orientations; (B) on the institution&#x27;s website; and (C) during employee onboarding programs.</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-4-publicize-procedure">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-4-publicize-procedure">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-4-publicize-procedure">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-4-publicize-procedure">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the Executive Vice President for University Academic Affairs" data-oid="CHE-HEA1001-implement-suspensions-before-ay2627">
+          <div class="hd">
+            <div class="summ">Implement any approved program suspensions or mergers before academic year 2026-2027.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">CHE Guidance, HEA 1001-2025</span>
+            <span class="pill">process</span>
+            <span class="pill">one_time</span>
+            <span class="pill">due: before academic year 2026-2027</span>
+            <span class="pill">confidence 0.91</span>
+            <span class="prov">decided by: agent</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Executive Vice President for University Academic Affairs — Program suspension and merger execution is an academic affairs responsibility.</div>
+          
+          
+          <div class="reason"><b>Agent routing:</b> All checks passed; combined confidence 0.91. Filed to Office of the Executive Vice President for University Academic Affairs.</div>
+          <blockquote>Any approved suspensions or mergers must be implemented before academic year 2026-2027.</blockquote>
+          <div class="reason">Grounded in CHE-HEA1001-GUIDANCE
+            (exact match: true) · <a href="https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf" target="_blank" rel="noopener">source</a></div>
+          
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="CHE-HEA1001-implement-suspensions-before-ay2627">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-CHE-HEA1001-implement-suspensions-before-ay2627">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="CHE-HEA1001-implement-suspensions-before-ay2627">Record decision</button>
+        <button class="btn js-cancel" data-oid="CHE-HEA1001-implement-suspensions-before-ay2627">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Institutional Analytics" data-oid="IC-21-18-9-10.7-monitor-graduate-averages">
+          <div class="hd">
+            <div class="summ">Maintain three-year rolling average graduate counts for every degree program so threshold status can be determined.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-18-9-10.7(a)(1)</span>
+            <span class="pill">recordkeeping</span>
+            <span class="pill">annual</span>
+            
+            <span class="pill">confidence 0.78</span>
+            <span class="prov">decided by: analyst</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Institutional Analytics — The threshold test depends on graduate counts, which are produced and certified by institutional analytics.</div>
+          <div class="reason"><b>Agent originally:</b> human_review &middot; Institutional Analytics &mdash; superseded by analyst review below.</div>
+          <div class="reason"><b>Verifier objection:</b> The quoted span states the threshold test, not an express duty to maintain rolling averages. The monitoring duty is a reasonable operational inference but is not commanded by this text.</div>
+          <div class="reason"><b>Agent routing:</b> Verifier confidence 0.62 below 0.75.</div>
+          <blockquote>average number of students who graduate over the immediately preceding three (3) years is fewer than</blockquote>
+          <div class="reason">Grounded in IC-21-18-9-10.7
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/" target="_blank" rel="noopener">source</a></div>
+          <div class="history"><h5>Decision history (1)</h5><div class="hentry">
+              <div class="hhead">2026-08-19T21:14:53+00:00 · m.mendez ·
+                REROUTE</div>
+              <div>human_review → auto_file</div>
+              <div class="hcomment">&ldquo;Verifier flagged this as inferred rather than commanded, which is fair, but we do maintain these counts operationally and want it tracked. Accepting the risk deliberately.&rdquo;</div>
+              
+              <div class="htrace">dec-739ec553fe19</div></div></div>
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-18-9-10.7-monitor-graduate-averages">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-18-9-10.7-monitor-graduate-averages">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-18-9-10.7-monitor-graduate-averages">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-18-9-10.7-monitor-graduate-averages">Cancel</button>
+      </div>
+    </div>
+        </article>
+        <article class="card auto_file" data-route="auto_file"
+                 data-unit="Office of the Vice President and General Counsel" data-oid="IC-21-39.5-2-4-make-complaints-available-to-trustees">
+          <div class="hd">
+            <div class="summ">Make submitted complaints and any relevant documents, summaries, or investigations available to the board of trustees.</div>
+            <span class="badge">● AUTO-FILED</span>
+          </div>
+          <div class="meta">
+            <span class="pill">IC 21-39.5-2-4(a)(4)</span>
+            <span class="pill">disclosure</span>
+            <span class="pill">continuous</span>
+            
+            <span class="pill">confidence 0.64</span>
+            <span class="prov">decided by: analyst</span>
+          </div>
+          <div class="reason"><b>Owner:</b> Office of the Vice President and General Counsel — Production of investigation materials to the board is typically routed through counsel.</div>
+          <div class="reason"><b>Agent originally:</b> human_review &middot; Office of the Vice President and General Counsel &mdash; superseded by analyst review below.</div>
+          <div class="reason"><b>Verifier objection:</b> The statute directs materials to the board of trustees and names no intermediary. Assigning ownership to General Counsel is plausible institutional practice but is not supported by the text; BOARD_OF_TRUSTEES or UNASSIGNED is better grounded.</div>
+          <div class="reason"><b>Agent routing:</b> Verifier raised an objection: The statute directs materials to the board of trustees and names no intermediary. Assigning ownership to General Counsel is plausible institutional practice but is not supported by the text; BOARD_OF_TRUSTEES or UNASSIGNED is better grounded.</div>
+          <blockquote>Make complaints submitted under subdivision (1) and any relevant documents, summaries, or investigations available to the board of trustees of the institution.</blockquote>
+          <div class="reason">Grounded in IC-21-39.5-2-4
+            (exact match: true) · <a href="https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/" target="_blank" rel="noopener">source</a></div>
+          <div class="history"><h5>Decision history (2)</h5><div class="hentry">
+              <div class="hhead">2026-08-19T21:14:52+00:00 · k.adams ·
+                REASSIGN</div>
+              <div>human_review → human_review · GENERAL_COUNSEL → BOARD_OF_TRUSTEES</div>
+              <div class="hcomment">&ldquo;Verifier was correct. The statute directs materials to the board with no intermediary; General Counsel was our assumption, not the text.&rdquo;</div>
+              <div class="htrace">Re-ran deterministic checks on analyst-corrected input: groundedness exact=True fuzzy=100.0 passed=True; prior verdict discarded as stale (it judged text the analyst has since changed); routed without a semantic verdict, which cannot auto-file; routing returned human_review (combined 0.92).</div>
+              <div class="htrace">dec-60ebafe059e2</div></div><div class="hentry">
+              <div class="hhead">2026-08-19T21:14:52+00:00 · k.adams ·
+                CONFIRM</div>
+              <div>human_review → auto_file</div>
+              <div class="hcomment">&ldquo;Reassignment checked against the statutory text. Board of Trustees confirmed as owner.&rdquo;</div>
+              
+              <div class="htrace">dec-f5450d0ed04f · supersedes dec-60ebafe059e2</div></div></div>
+          <div class="actions">
+            <button class="btn primary js-open" data-oid="IC-21-39.5-2-4-make-complaints-available-to-trustees">Review this</button>
+          </div>
+          
+    <div class="review hidden" id="rv-IC-21-39.5-2-4-make-complaints-available-to-trustees">
+      <label>Action</label>
+      <select class="js-action"><option value="confirm">Confirm — file as-is</option><option value="reassign">Reassign to a different office</option><option value="amend">Amend the text and re-run the checks</option><option value="reroute">Force a different route</option><option value="reject">Reject</option></select>
+
+      <div class="row">
+        <div>
+          <label>Reassign to</label>
+          <select class="js-unit"><option value="">— unchanged —</option><option value="GENERAL_COUNSEL">Office of the Vice President and General Counsel</option><option value="ACADEMIC_AFFAIRS">Office of the Executive Vice President for University Academic Affairs</option><option value="STUDENT_SUCCESS">Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</option><option value="ENROLLMENT_SERVICES">University Enrollment Services</option><option value="INSTITUTIONAL_ANALYTICS">Institutional Analytics</option><option value="ACCREDITATION">University Effectiveness and Accreditation</option><option value="HUMAN_RESOURCES">IU Human Resources</option><option value="BOARD_OF_TRUSTEES">Board of Trustees</option><option value="REGISTRAR">Office of the University Registrar</option><option value="STRATEGIC_INITIATIVES">University Strategic Initiatives</option><option value="UNASSIGNED">Unassigned - needs triage</option></select>
+        </div>
+        <div>
+          <label>Force route to</label>
+          <select class="js-route">
+            <option value="">— unchanged —</option>
+            <option value="auto_file">auto_file</option>
+            <option value="human_review">human_review</option>
+            <option value="rejected">rejected</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Corrected summary <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-summary" placeholder="Leave blank to keep the current summary">
+
+      <label>Corrected quote <span style="text-transform:none;font-weight:400">(optional)</span></label>
+      <input type="text" class="js-quote" placeholder="Must appear verbatim in the source — it is re-checked">
+
+      <label>Reviewer</label>
+      <input type="text" class="js-reviewer" placeholder="your username">
+
+      <label>Why — required</label>
+      <textarea class="js-comment" placeholder="State the reason. This is stored permanently and is what makes the override auditable."></textarea>
+      <div class="hint">Minimum one real sentence. An override with no stated reason is rejected by the API.</div>
+
+      <div class="err js-err"></div>
+      <div class="ok js-ok"></div>
+      <div class="fallback js-fallback"></div>
+
+      <div class="actions">
+        <button class="btn primary js-submit" data-oid="IC-21-39.5-2-4-make-complaints-available-to-trustees">Record decision</button>
+        <button class="btn js-cancel" data-oid="IC-21-39.5-2-4-make-complaints-available-to-trustees">Cancel</button>
+      </div>
+    </div>
+        </article></div>
+
+  <details class="tableview"><summary>Table view (all 25 obligations)</summary>
+    <table><thead><tr><th>Citation</th><th>Obligation</th><th>Owner</th>
+      <th>Deadline</th><th>Conf.</th><th>Route</th></tr></thead>
+      <tbody><tr><td>IC 21-18-9-10.7(a)</td><td>Request Commission for Higher Education approval to continue any degree program whose three-year average graduate count falls below the statutory threshold for its award level.</td><td>Office of the Executive Vice President for University Academic Affairs</td><td>—</td><td>0.95</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-18-9-10.7(b)</td><td>Eliminate any under-threshold degree program, and the costs associated with it, where the Commission declines to approve continuation.</td><td>Office of the Executive Vice President for University Academic Affairs</td><td>—</td><td>0.93</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-18-9-10.7(a)(1)</td><td>Maintain three-year rolling average graduate counts for every degree program so threshold status can be determined.</td><td>Institutional Analytics</td><td>—</td><td>0.78</td><td>▲ NEEDS REVIEW</td></tr><tr><td>IC 21-39.5-2-2(a)</td><td>Review each tenured faculty member against the five statutory criteria within five years of tenure and every five years thereafter.</td><td>Board of Trustees</td><td>Not later than five (5) years after tenure is granted, and every five (5) years thereafter</td><td>0.97</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-2(c)</td><td>Certify the determination when the board finds a faculty member has met the criteria.</td><td>Board of Trustees</td><td>—</td><td>0.94</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-2(e)</td><td>Adopt a disciplinary policy specifying the actions available when a tenured faculty member fails to meet one or more criteria.</td><td>IU Human Resources</td><td>—</td><td>0.94</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-2(f)</td><td>Review and renew or amend the post-tenure review process and any board-established criteria at least every five years.</td><td>Board of Trustees</td><td>at least every five (5) years</td><td>0.95</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-2(g)</td><td>Submit the post-tenure review process and criteria to the Commission for Higher Education each time they are reviewed, renewed, or amended.</td><td>Board of Trustees</td><td>—</td><td>0.96</td><td>▲ NEEDS REVIEW</td></tr><tr><td>IC 21-39.5-2-3(b)</td><td>Give substantial consideration to the section 2(a)(1)-(5) criteria before renewing a faculty contract, making a bonus decision, or completing a performance assessment.</td><td>IU Human Resources</td><td>—</td><td>0.92</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-4(a)(1)</td><td>Establish a procedure allowing students and employees to submit complaints that a faculty member is not meeting the statutory criteria.</td><td>IU Human Resources</td><td>—</td><td>0.96</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-4(a)(2)</td><td>Publicise the complaint procedure at student orientations, on the institution&#x27;s website, and during employee onboarding.</td><td>Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</td><td>—</td><td>0.92</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-4(a)(3)</td><td>Refer submitted complaints to appropriate HR professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.</td><td>IU Human Resources</td><td>—</td><td>0.95</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-39.5-2-4(a)(4)</td><td>Make submitted complaints and any relevant documents, summaries, or investigations available to the board of trustees.</td><td>Office of the Vice President and General Counsel</td><td>—</td><td>0.64</td><td>▲ NEEDS REVIEW</td></tr><tr><td>IC 21-39.5-2-4(a)(5)</td><td>File an annual report with the Commission for Higher Education summarising the complaint procedure, how it was publicised, and complaint counts disaggregated by type.</td><td>University Effectiveness and Accreditation</td><td>not later than April 1, 2025, and not later than April 1 each year thereafter</td><td>0.98</td><td>▲ NEEDS REVIEW</td></tr><tr><td>IC 21-39.5-2-4(a)(6)</td><td>Publish a quarterly public dashboard of complaint volumes disaggregated by campus.</td><td>Institutional Analytics</td><td>—</td><td>0.62</td><td>✕ REJECTED</td></tr><tr><td>IC 21-39.5-2-4(c)</td><td>Exclude identifying information about complainants and about faculty members who are the subject of complaints from any institutional or commission report.</td><td>Office of the Vice President and General Counsel</td><td>—</td><td>0.97</td><td>▲ NEEDS REVIEW</td></tr><tr><td>IC 21-39.5-3-2</td><td>Include content on free inquiry, free expression, intellectual diversity, and appropriate responses to offensive speech in programming for new students.</td><td>Office of the Vice President for Student Success, Enrollment and Institutional Effectiveness</td><td>—</td><td>0.95</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-42-3-5(a)</td><td>Do not require a transfer student who has completed the Indiana college core to take additional college core courses, regardless of associate degree status or delivery method.</td><td>Office of the University Registrar</td><td>—</td><td>0.93</td><td>▲ NEEDS REVIEW</td></tr><tr><td>IC 21-42-3-5(b)</td><td>Award credit for satisfactorily completed courses based on the course-to-course equivalencies in the core transfer library.</td><td>Office of the University Registrar</td><td>—</td><td>0.96</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-42-3-5(c)</td><td>Treat an admitted holder of a Commission-approved associate of arts or science degree as having met at least 30 semester credit hours of general education requirements.</td><td>Office of the University Registrar</td><td>—</td><td>0.93</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-42-5-4(4)</td><td>Identify transfer equivalents so that a core transfer library course accepted by one IU regional campus is accepted by all other regional campuses offering the same equivalent course.</td><td>Office of the University Registrar</td><td>—</td><td>0.96</td><td>● AUTO-FILED</td></tr><tr><td>IC 21-42-5-4(5)</td><td>Ensure equivalent courses, including those sharing a course number and title, count identically at every campus in the IU system where offered.</td><td>Office of the University Registrar</td><td>—</td><td>0.95</td><td>● AUTO-FILED</td></tr><tr><td>CHE Guidance, HEA 1001-2025</td><td>Submit to the Commission the Replacement Ratio, Credit Hour Production Ratio, Viability Index, three-year graduate averages, a 250-word Program Overview, and a 500-word Rationale to Continue.</td><td>Institutional Analytics</td><td>—</td><td>0.96</td><td>▲ NEEDS REVIEW</td></tr><tr><td>CHE Guidance, HEA 1001-2025</td><td>Implement any approved program suspensions or mergers before academic year 2026-2027.</td><td>Office of the Executive Vice President for University Academic Affairs</td><td>before academic year 2026-2027</td><td>0.91</td><td>● AUTO-FILED</td></tr><tr><td>CHE Guidance, HEA 1001-2025</td><td>Respond to the Commission&#x27;s preliminary under-threshold program list within 30 days of receipt.</td><td>Office of the Executive Vice President for University Academic Affairs</td><td>within 30 days of receipt</td><td>0.53</td><td>✕ REJECTED</td></tr></tbody></table>
+  </details>
+
+  <h2>Documents filtered out before extraction (2)</h2>
+  <table><thead><tr><th>Citation</th><th>Title</th><th>Reason</th></tr></thead>
+    <tbody><tr><td>Synthetic distractor (not real statute)</td><td>Negative control: agricultural equipment registration</td><td>Triaged as not relevant (confidence 0.96): Concerns registration of agricultural implements with the bureau of motor vehicles and county highway mileage reporting. No duty attaches to a state educational institution.</td></tr><tr><td>Synthetic distractor (not real statute)</td><td>Negative control: municipal water utility rate filings</td><td>Triaged as not relevant (confidence 0.97): Concerns rate schedule filings by municipally owned water utilities before the utility regulatory commission. No institutional duty.</td></tr></tbody></table>
+
+  <footer>
+    <p><b>Corpus provenance.</b> Source documents for LegisWatch. Verbatim Indiana Code text retrieved from public sources (Justia / IN.gov). Negative controls are clearly flagged and are synthetic distractors used to measure triage precision.
+       Retrieved 2026-08-15.</p>
+    <p>Every obligation on this page carries the verbatim span it was drawn from.
+       Nothing is auto-filed without passing a deterministic groundedness check and an
+       independent adversarial verification pass. External reporting duties and statutory
+       prohibitions are never auto-filed — they always route to a human by policy, regardless
+       of model confidence.</p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var tt = document.getElementById('tt');
+  tt.addEventListener('click', function () {
+    var cur = document.documentElement.getAttribute('data-theme');
+    var next = cur === 'dark' ? 'light' : (cur === 'light' ? 'dark' :
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'light' : 'dark'));
+    document.documentElement.setAttribute('data-theme', next);
+  });
+
+  var route = 'all', unit = 'all';
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#cards .card'));
+
+  function apply() {
+    cards.forEach(function (c) {
+      var okR = route === 'all' || c.dataset.route === route;
+      var okU = unit === 'all' || c.dataset.unit === unit;
+      c.classList.toggle('hidden', !(okR && okU));
+    });
+  }
+
+  document.querySelectorAll('.chip').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.chip').forEach(function (x) {
+        x.setAttribute('aria-pressed', String(x === b));
+      });
+      route = b.dataset.f; apply();
+    });
+  });
+  document.getElementById('unitf').addEventListener('change', function (e) {
+    unit = e.target.value; apply();
+  });
+
+  // ---- analyst review -------------------------------------------------
+  var API = 'http://127.0.0.1:8000';
+
+  function panel(oid) { return document.getElementById('rv-' + oid); }
+
+  document.querySelectorAll('.js-open').forEach(function (b) {
+    b.addEventListener('click', function () {
+      panel(b.dataset.oid).classList.toggle('hidden');
+    });
+  });
+  document.querySelectorAll('.js-cancel').forEach(function (b) {
+    b.addEventListener('click', function () {
+      panel(b.dataset.oid).classList.add('hidden');
+    });
+  });
+
+  function buildBody(p) {
+    var edits = {};
+    var summary = p.querySelector('.js-summary').value.trim();
+    var quote = p.querySelector('.js-quote').value.trim();
+    if (summary) edits.summary = summary;
+    if (quote) edits.verbatim_quote = quote;
+
+    var body = {
+      action: p.querySelector('.js-action').value,
+      reviewer: p.querySelector('.js-reviewer').value.trim(),
+      comment: p.querySelector('.js-comment').value.trim(),
+      field_edits: edits
+    };
+    var u = p.querySelector('.js-unit').value;
+    var rt = p.querySelector('.js-route').value;
+    if (u) body.to_unit = u;
+    if (rt) body.to_route = rt;
+    return body;
+  }
+
+  function cliEquivalent(oid, body) {
+    var parts = ['legiswatch-review decide ' + oid,
+                 '  --action ' + body.action,
+                 '  --reviewer ' + (body.reviewer || 'YOUR_NAME'),
+                 '  --comment "' + body.comment.replace(/"/g, '\\"') + '"'];
+    if (body.to_unit) parts.push('  --to-unit ' + body.to_unit);
+    if (body.to_route) parts.push('  --to-route ' + body.to_route);
+    Object.keys(body.field_edits).forEach(function (k) {
+      parts.push('  --set ' + k + '="' + body.field_edits[k].replace(/"/g, '\\"') + '"');
+    });
+    return parts.join(' \\\n');
+  }
+
+  document.querySelectorAll('.js-submit').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var oid = b.dataset.oid, p = panel(oid);
+      var err = p.querySelector('.js-err'), ok = p.querySelector('.js-ok');
+      var fb = p.querySelector('.js-fallback');
+      err.style.display = ok.style.display = fb.style.display = 'none';
+
+      var body = buildBody(p);
+
+      // Client-side mirror of the server's rule. The API enforces it regardless;
+      // this just avoids a round-trip to be told the comment is too thin.
+      if (!body.reviewer) {
+        err.textContent = 'Reviewer is required — a decision has to belong to someone.';
+        err.style.display = 'block'; return;
+      }
+      if (body.comment.length < 10 || body.comment.split(/\s+/).length < 3) {
+        err.textContent = 'A real reason is required. This is stored permanently and is what makes the override auditable.';
+        err.style.display = 'block'; return;
+      }
+
+      b.disabled = true; b.textContent = 'Recording…';
+      fetch(API + '/obligations/' + encodeURIComponent(oid) + '/decisions', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(body)
+      })
+      .then(function (res) { return res.json().then(function (j) { return {ok: res.ok, j: j}; }); })
+      .then(function (r) {
+        if (!r.ok) {
+          err.textContent = 'Rejected: ' + (r.j.detail || JSON.stringify(r.j));
+          err.style.display = 'block'; return;
+        }
+        ok.innerHTML = '<b>' + r.j.decision.decision_id + '</b> recorded · ' +
+          r.j.decision.from_route + ' &rarr; ' + r.j.decision.to_route +
+          '<br>' + r.j.note;
+        ok.style.display = 'block';
+      })
+      .catch(function () {
+        // API unreachable. Degrade to showing the equivalent CLI invocation so
+        // the reviewer can still record the decision.
+        fb.textContent = 'API not reachable at ' + API +
+                    '.
+Start it with:  uvicorn legiswatch.api:app\n\n' +
+          'Or record this decision from the console:\n\n' + cliEquivalent(oid, body);
+        fb.style.display = 'block';
+      })
+      .finally(function () { b.disabled = false; b.textContent = 'Record decision'; });
+    });
+  });
+})();
+</script>
+</body></html>

@@ -1,0 +1,107 @@
+{
+  "corpus_version": "1.0",
+  "description": "Source documents for LegisWatch. Verbatim Indiana Code text retrieved from public sources (Justia / IN.gov). Negative controls are clearly flagged and are synthetic distractors used to measure triage precision.",
+  "retrieved": "2026-08-15",
+  "documents": [
+    {
+      "doc_id": "IC-21-18-9-10.7",
+      "citation": "IC 21-18-9-10.7",
+      "title": "Degree Program Reviews; Graduate Thresholds; Commission Approval to Continue",
+      "enacting_act": "P.L.213-2025, SEC.248 (HEA 1001-2025)",
+      "effective_date": "2025-07-01",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-18/chapter-9/section-21-18-9-10-7/",
+      "is_negative_control": false,
+      "text": "Sec. 10.7. (a) For each state educational institution degree program, if the: (1) average number of students who graduate over the immediately preceding three (3) years is fewer than: (A) ten (10) students for a particular associate degree program; (B) fifteen (15) students for a particular bachelor's degree program; (C) seven (7) students for a particular master's degree program; (D) three (3) students for a particular education specialist program; or (E) three (3) students for a particular doctorate degree program; and (2) state educational institution would like to continue a degree program described in subdivision (1); the state educational institution must request approval from the commission to continue the degree program. (b) If the commission does not grant approval under subsection (a), the state educational institution must eliminate: (1) the degree program; and (2) any costs associated with the degree program."
+    },
+    {
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2",
+      "title": "Board of Trustees Tenure Review Criteria; Institutional Disciplinary Policy",
+      "enacting_act": "P.L.113-2024, SEC.11 (SEA 202-2024)",
+      "effective_date": "2024-07-01",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-2/",
+      "is_negative_control": false,
+      "text": "Sec. 2. (a) Not later than five (5) years after the date that a faculty member is granted tenure by an institution and not later than every five (5) years thereafter, the board of trustees of an institution shall review and determine whether the faculty member has met the following criteria: (1) Helped the institution foster a culture of free inquiry, free expression, and intellectual diversity. (2) Introduced students to scholarly works from a variety of political or ideological frameworks that may exist within the curricula established by the: (A) board of trustees of the institution under IC 21-41-2-1(b); or (B) faculty of the institution acting under authority delegated by the board of trustees. (3) While performing teaching duties within the scope of the faculty member's employment, refrained from subjecting students to views and opinions concerning matters not related to the faculty member's academic discipline or assigned course. (4) Adequately performed academic duties and obligations. (5) Met any other criteria established by the board of trustees. (b) When reviewing a faculty member under subsection (a), the board of trustees shall assess and review the staffing needs of the institution based on the branches, campuses, extension centers, colleges, schools, and degrees or programs approved by the commission for higher education. (c) If the board determines a faculty member meets the criteria, the board shall certify that determination. (d) The board may not consider these actions when determining criterion compliance: (1) Expressing dissent or engaging in research or public commentary on subjects. (2) Criticizing the institution's leadership. (3) Engaging in any political activity conducted outside teaching duties. (e) The institution shall adopt a disciplinary policy establishing actions including termination, demotion, salary reduction, or other disciplinary action if the board determines a tenured faculty member has failed to meet one or more criteria. (f) The board shall, at least every five (5) years, review and renew or amend the review process and any criteria established under subsection (a)(5). (g) The board shall submit to the commission for higher education the process and criteria each time they are reviewed, renewed, or amended. (h) The commission for higher education shall: (1) Review the process and criteria submitted by the board; (2) Provide feedback for the board to consider in exercising its statutory responsibility."
+    },
+    {
+      "doc_id": "IC-21-39.5-2-3",
+      "citation": "IC 21-39.5-2-3",
+      "title": "Institution Employment, Contract, Bonus, or Performance Assessment Review Criteria",
+      "enacting_act": "P.L.113-2024, SEC.11 (SEA 202-2024)",
+      "effective_date": "2024-07-01",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-3/",
+      "is_negative_control": false,
+      "text": "Sec. 3. (a) This section applies to the following: (1) A faculty member. (2) A person with whom the institution contracts to teach a student of the institution. (b) Before an institution: (1) renews an employment agreement or other contract with; (2) makes a bonus decision regarding; or (3) completes a review or performance assessment of; a faculty member or person described in subsection (a), the institution must provide substantial consideration to performance regarding criteria in section 2(a)(1) through 2(a)(5) of this chapter."
+    },
+    {
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4",
+      "title": "Complaint Procedure; Institution Report; Commission for Higher Education Report",
+      "enacting_act": "P.L.113-2024, SEC.11 (SEA 202-2024)",
+      "effective_date": "2024-07-01",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-2/section-21-39-5-2-4/",
+      "is_negative_control": false,
+      "text": "Sec. 4. (a) Each institution shall do the following: (1) Establish a procedure that allows both students and employees to submit complaints that a faculty member or person described in section 3(a) of this chapter is not meeting the criteria described in section 2(a)(1) through 2(a)(5) of this chapter. (2) Provide information regarding the procedure established under subdivision (1): (A) at student orientations; (B) on the institution's website; and (C) during employee onboarding programs. (3) Refer complaints submitted under subdivision (1) to appropriate human resource professionals and supervisors for consideration in employee reviews and tenure and promotion decisions. (4) Make complaints submitted under subdivision (1) and any relevant documents, summaries, or investigations available to the board of trustees of the institution. (5) Submit a report to the commission for higher education not later than April 1, 2025, and not later than April 1 each year thereafter, summarizing: (A) the established complaint procedure; (B) how and when information was provided to students, faculty, employees, and contractors; and (C) the number of complaints submitted, disaggregated by type, during the previous calendar year. (b) The commission for higher education shall do the following: (1) Prepare a report providing information about total complaint submissions and disaggregation by type. (2) Submit the report not later than July 1, 2025, and not later than July 1 of each odd-numbered year thereafter to the legislative council in electronic format. (c) An institution and the commission may not include identifying information regarding: (1) complainants; or (2) faculty members against whom complaints were submitted."
+    },
+    {
+      "doc_id": "IC-21-39.5-3-2",
+      "citation": "IC 21-39.5-3-2",
+      "title": "New Student Information",
+      "enacting_act": "P.L.113-2024, SEC.11 (SEA 202-2024)",
+      "effective_date": "2024-07-01",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-39-5/chapter-3/section-21-39-5-3-2/",
+      "is_negative_control": false,
+      "text": "Sec. 2. An institution shall include the following information in the institution's programming for new students: (1) The importance of: (A) free inquiry and free expression; and (B) intellectual diversity of viewpoints. (2) The appropriate and inappropriate responses to speech that a student finds offensive or disagreeable."
+    },
+    {
+      "doc_id": "IC-21-42-3-5",
+      "citation": "IC 21-42-3-5",
+      "title": "Indiana College Core",
+      "enacting_act": "P.L.88-2012, SEC.3; amended by P.L.94-2024, SEC.9",
+      "effective_date": "2024-07-01",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-3/section-21-42-3-5/",
+      "is_negative_control": false,
+      "text": "Sec. 5. (a) After May 15, 2013, an individual who has satisfactorily completed the Indiana college core at a state educational institution, as indicated on the individual's official transcript, may not be required to complete additional courses in the Indiana college core at the state educational institution to which the individual transfers, regardless of whether the individual has received an associate degree or the delivery method of the Indiana college core the individual completed. (b) If an individual does not complete the Indiana college core of a state educational institution before transferring to another state educational institution, the individual must complete the Indiana college core required by the state educational institution to which the individual has transferred. The state educational institution to which the individual has transferred shall award credit to the individual for courses the individual has satisfactorily completed, based on the course to course equivalencies of the core transfer library established under IC 21-42-5. (c) An individual who holds an associate of arts or associate of science degree approved by the commission who is admitted to a four (4) year state educational institution is considered to have met at least thirty (30) semester credit hours of the state educational institution's general education requirement."
+    },
+    {
+      "doc_id": "IC-21-42-5-4",
+      "citation": "IC 21-42-5-4",
+      "title": "Core Transfer Library; Principles",
+      "enacting_act": "P.L.2-2007, SEC.283; amended by P.L.120-2013, SEC.5",
+      "effective_date": "2013-07-01",
+      "source_url": "https://law.justia.com/codes/indiana/title-21/article-42/chapter-5/section-21-42-5-4/",
+      "is_negative_control": false,
+      "text": "Sec. 4. The core transfer library shall be developed in accordance with the following principles: (1) Each course in the core transfer library must transfer in and apply toward meeting degree requirements in the same way as the receiving state educational institution's equivalent course. (2) Courses in the core transfer library must draw from the liberal arts and introductory or foundational courses in technical, professional, and occupational fields that are part of the single articulation pathways established under IC 21-42-6-4. (3) At least seventy (70) courses must be identified for inclusion in the core transfer library. The identified courses must emphasize the courses most frequently taken by undergraduates. (4) With respect to core transfer library courses being transferred from a state educational institution to Indiana University or Purdue University, Indiana University and Purdue University must identify transfer equivalents so that a course accepted by one (1) regional campus is accepted by all other regional campuses that offer the same transfer equivalent course. (5) Within the Indiana University system and Purdue University system, equivalent courses, including courses with the same course number and title, must count in the same way at all campuses within the system where the course is offered."
+    },
+    {
+      "doc_id": "CHE-HEA1001-GUIDANCE",
+      "citation": "CHE Guidance, HEA 1001-2025 Degree Program Thresholds (v1.0, 06.13.25)",
+      "title": "Approval to Continue Under-Threshold Degree Programs; Commission Guidance and FAQ",
+      "enacting_act": "Administrative guidance implementing IC 21-18-9-10.7",
+      "effective_date": "2025-06-13",
+      "source_url": "https://www.in.gov/che/files/HEA1001-Graduate-Thresholds-CHE-Initial-Guidance-and-FAQ_V1-6.13.25.pdf",
+      "is_negative_control": false,
+      "text": "Under IC 21-18-9-10.7, institutions must seek Commission approval to continue programs where the three-year rolling average of graduates falls below ten (10) students for associate degrees, fifteen (15) students for bachelor's degrees, seven (7) students for master's degrees, three (3) students for education specialist programs, and three (3) students for doctorate degrees. The immediately preceding three years under analysis post-July 1, 2025, will be fiscal years FY2022, FY2023, and FY2024. The statute becomes effective July 1, 2025. In mid-to-late July the Commission will provide institutions a preliminary list of under-threshold programs. Any approved suspensions or mergers must be implemented before academic year 2026-2027. Institutions must provide to the Commission the Replacement Ratio for all degree programs, the Credit Hour Production Ratio for undergraduate programs only, the Viability Index for undergraduate programs, three-year average graduate counts for under-threshold programs, a Program Overview limited to 250 words, and a Rationale to Continue limited to 500 words. Questions may be directed to API@che.in.gov."
+    },
+    {
+      "doc_id": "NEG-CONTROL-01",
+      "citation": "Synthetic distractor (not real statute)",
+      "title": "Negative control: agricultural equipment registration",
+      "enacting_act": "N/A",
+      "effective_date": "2025-07-01",
+      "source_url": null,
+      "is_negative_control": true,
+      "text": "Sec. 12. (a) A person who owns a self-propelled agricultural implement operated on a public highway shall register the implement with the bureau of motor vehicles not later than thirty (30) days after acquiring the implement. (b) The bureau shall establish a registration fee not to exceed twenty-five dollars ($25) per implement. (c) A county highway department shall report annually to the department of transportation the total mileage of highways designated for implement travel."
+    },
+    {
+      "doc_id": "NEG-CONTROL-02",
+      "citation": "Synthetic distractor (not real statute)",
+      "title": "Negative control: municipal water utility rate filings",
+      "enacting_act": "N/A",
+      "effective_date": "2025-07-01",
+      "source_url": null,
+      "is_negative_control": true,
+      "text": "Sec. 5. (a) A municipally owned water utility shall file with the utility regulatory commission a schedule of proposed rates and charges not later than sixty (60) days before the proposed effective date of the rates. (b) The commission shall hold a public hearing on the proposed schedule. (c) This section does not apply to a utility serving fewer than one thousand (1,000) customers."
+    }
+  ]
+}

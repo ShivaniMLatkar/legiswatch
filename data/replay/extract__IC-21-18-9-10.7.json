@@ -1,0 +1,49 @@
+{
+  "key": "extract__IC-21-18-9-10.7",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "IC-21-18-9-10.7-request-approval-under-threshold",
+        "summary": "Request Commission for Higher Education approval to continue any degree program whose three-year average graduate count falls below the statutory threshold for its award level.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "the state educational institution must request approval from the commission to continue the degree program",
+        "citation": "IC 21-18-9-10.7(a)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "ACADEMIC_AFFAIRS",
+        "unit_rationale": "The statute places the duty on the 'state educational institution' and concerns continuation of academic degree programs, which sits with academic affairs.",
+        "confidence": 0.93
+      },
+      {
+        "obligation_id": "IC-21-18-9-10.7-eliminate-unapproved-programs",
+        "summary": "Eliminate any under-threshold degree program, and the costs associated with it, where the Commission declines to approve continuation.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "If the commission does not grant approval under subsection (a), the state educational institution must eliminate",
+        "citation": "IC 21-18-9-10.7(b)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "ACADEMIC_AFFAIRS",
+        "unit_rationale": "Duty falls on the institution and concerns program discontinuation, an academic affairs function.",
+        "confidence": 0.88
+      },
+      {
+        "obligation_id": "IC-21-18-9-10.7-monitor-graduate-averages",
+        "summary": "Maintain three-year rolling average graduate counts for every degree program so threshold status can be determined.",
+        "obligation_type": "recordkeeping",
+        "recurrence": "annual",
+        "verbatim_quote": "average number of students who graduate over the immediately preceding three (3) years is fewer than",
+        "citation": "IC 21-18-9-10.7(a)(1)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "INSTITUTIONAL_ANALYTICS",
+        "unit_rationale": "The threshold test depends on graduate counts, which are produced and certified by institutional analytics.",
+        "confidence": 0.79
+      }
+    ],
+    "extraction_notes": "The monitoring duty in the third obligation is implied by the threshold test rather than stated as an express command; flagged for reviewer judgement."
+  }
+}

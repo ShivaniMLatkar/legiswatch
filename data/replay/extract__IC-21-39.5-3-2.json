@@ -1,0 +1,23 @@
+{
+  "key": "extract__IC-21-39.5-3-2",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "IC-21-39.5-3-2-new-student-programming-content",
+        "summary": "Include content on free inquiry, free expression, intellectual diversity, and appropriate responses to offensive speech in programming for new students.",
+        "obligation_type": "disclosure",
+        "recurrence": "continuous",
+        "verbatim_quote": "An institution shall include the following information in the institution's programming for new students",
+        "citation": "IC 21-39.5-3-2",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "STUDENT_SUCCESS",
+        "unit_rationale": "New student programming is delivered by student success and orientation units.",
+        "confidence": 0.91
+      }
+    ],
+    "extraction_notes": null
+  }
+}

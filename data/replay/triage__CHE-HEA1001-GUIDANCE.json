@@ -1,0 +1,15 @@
+{
+  "key": "triage__CHE-HEA1001-GUIDANCE",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.97,
+    "rationale": "Commission guidance implementing IC 21-18-9-10.7; specifies the metrics, narrative submissions, and implementation timeline institutions must meet.",
+    "matched_topics": [
+      "degree programs",
+      "commission submission",
+      "program thresholds"
+    ]
+  }
+}

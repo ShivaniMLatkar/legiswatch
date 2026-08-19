@@ -1,0 +1,15 @@
+{
+  "key": "triage__IC-21-42-3-5",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.96,
+    "rationale": "Governs how a receiving state educational institution must treat the Indiana college core and award transfer credit, constraining registrar practice directly.",
+    "matched_topics": [
+      "transfer credit",
+      "Indiana college core",
+      "registrar"
+    ]
+  }
+}

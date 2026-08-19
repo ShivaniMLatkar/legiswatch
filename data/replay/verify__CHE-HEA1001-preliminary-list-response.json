@@ -1,0 +1,14 @@
+{
+  "key": "verify__CHE-HEA1001-preliminary-list-response",
+  "schema": "VerificationVerdict",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligation_id": "CHE-HEA1001-preliminary-list-response",
+    "quote_is_grounded": true,
+    "summary_is_faithful": false,
+    "deadline_is_correct": false,
+    "unit_is_defensible": true,
+    "verifier_confidence": 0.35,
+    "objection": "The source says only that the Commission will provide a preliminary list in mid-to-late July. It states no institutional response window. The '30 days of receipt' deadline in the summary and deadline_text appears nowhere in the source text."
+  }
+}

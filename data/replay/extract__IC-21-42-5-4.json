@@ -1,0 +1,36 @@
+{
+  "key": "extract__IC-21-42-5-4",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "IC-21-42-5-4-identify-transfer-equivalents-across-regional-campuses",
+        "summary": "Identify transfer equivalents so that a core transfer library course accepted by one IU regional campus is accepted by all other regional campuses offering the same equivalent course.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "Indiana University and Purdue University must identify transfer equivalents so that a course accepted by one (1) regional campus is accepted by all other regional campuses that offer the same transfer equivalent course",
+        "citation": "IC 21-42-5-4(4)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "REGISTRAR",
+        "unit_rationale": "The statute names Indiana University directly; equivalency identification is a registrar function.",
+        "confidence": 0.94
+      },
+      {
+        "obligation_id": "IC-21-42-5-4-system-wide-course-equivalence",
+        "summary": "Ensure equivalent courses, including those sharing a course number and title, count identically at every campus in the IU system where offered.",
+        "obligation_type": "process",
+        "recurrence": "continuous",
+        "verbatim_quote": "Within the Indiana University system and Purdue University system, equivalent courses, including courses with the same course number and title, must count in the same way at all campuses within the system where the course is offered.",
+        "citation": "IC 21-42-5-4(5)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "REGISTRAR",
+        "unit_rationale": "Statute names the Indiana University system; course application rules are registrar-administered.",
+        "confidence": 0.92
+      }
+    ],
+    "extraction_notes": null
+  }
+}

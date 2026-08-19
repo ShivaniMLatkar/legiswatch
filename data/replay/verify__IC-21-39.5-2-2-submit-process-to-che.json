@@ -1,0 +1,14 @@
+{
+  "key": "verify__IC-21-39.5-2-2-submit-process-to-che",
+  "schema": "VerificationVerdict",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligation_id": "IC-21-39.5-2-2-submit-process-to-che",
+    "quote_is_grounded": true,
+    "summary_is_faithful": true,
+    "deadline_is_correct": true,
+    "unit_is_defensible": true,
+    "verifier_confidence": 0.94,
+    "objection": null
+  }
+}

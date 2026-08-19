@@ -1,0 +1,75 @@
+{
+  "key": "extract__IC-21-39.5-2-2",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "IC-21-39.5-2-2-five-year-post-tenure-review",
+        "summary": "Review each tenured faculty member against the five statutory criteria within five years of tenure and every five years thereafter.",
+        "obligation_type": "process",
+        "recurrence": "multi_year",
+        "verbatim_quote": "Not later than five (5) years after the date that a faculty member is granted tenure by an institution and not later than every five (5) years thereafter, the board of trustees of an institution shall review and determine whether the faculty member has met the following criteria",
+        "citation": "IC 21-39.5-2-2(a)",
+        "deadline_text": "Not later than five (5) years after tenure is granted, and every five (5) years thereafter",
+        "first_due_date": null,
+        "responsible_unit": "BOARD_OF_TRUSTEES",
+        "unit_rationale": "The statute names 'the board of trustees of an institution' as the actor.",
+        "confidence": 0.95
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-2-certify-determination",
+        "summary": "Certify the determination when the board finds a faculty member has met the criteria.",
+        "obligation_type": "recordkeeping",
+        "recurrence": "continuous",
+        "verbatim_quote": "If the board determines a faculty member meets the criteria, the board shall certify that determination.",
+        "citation": "IC 21-39.5-2-2(c)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "BOARD_OF_TRUSTEES",
+        "unit_rationale": "Statute names the board as the certifying actor.",
+        "confidence": 0.9
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-2-adopt-disciplinary-policy",
+        "summary": "Adopt a disciplinary policy specifying the actions available when a tenured faculty member fails to meet one or more criteria.",
+        "obligation_type": "policy",
+        "recurrence": "one_time",
+        "verbatim_quote": "The institution shall adopt a disciplinary policy establishing actions including termination, demotion, salary reduction, or other disciplinary action",
+        "citation": "IC 21-39.5-2-2(e)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "HUMAN_RESOURCES",
+        "unit_rationale": "Duty is on 'the institution' and concerns employment discipline, which HR owns in partnership with academic affairs.",
+        "confidence": 0.91
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-2-review-renew-process-five-years",
+        "summary": "Review and renew or amend the post-tenure review process and any board-established criteria at least every five years.",
+        "obligation_type": "process",
+        "recurrence": "multi_year",
+        "verbatim_quote": "The board shall, at least every five (5) years, review and renew or amend the review process and any criteria established under subsection (a)(5).",
+        "citation": "IC 21-39.5-2-2(f)",
+        "deadline_text": "at least every five (5) years",
+        "first_due_date": null,
+        "responsible_unit": "BOARD_OF_TRUSTEES",
+        "unit_rationale": "Statute names the board.",
+        "confidence": 0.92
+      },
+      {
+        "obligation_id": "IC-21-39.5-2-2-submit-process-to-che",
+        "summary": "Submit the post-tenure review process and criteria to the Commission for Higher Education each time they are reviewed, renewed, or amended.",
+        "obligation_type": "report",
+        "recurrence": "continuous",
+        "verbatim_quote": "The board shall submit to the commission for higher education the process and criteria each time they are reviewed, renewed, or amended.",
+        "citation": "IC 21-39.5-2-2(g)",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "BOARD_OF_TRUSTEES",
+        "unit_rationale": "Statute names the board as the submitting party; the trigger is any revision of the process.",
+        "confidence": 0.93
+      }
+    ],
+    "extraction_notes": null
+  }
+}

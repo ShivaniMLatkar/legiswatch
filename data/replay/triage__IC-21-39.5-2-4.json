@@ -1,0 +1,15 @@
+{
+  "key": "triage__IC-21-39.5-2-4",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.99,
+    "rationale": "Creates a cluster of institutional duties: establish and publicise a complaint procedure, refer and surface complaints, and file an annual report with the commission for higher education.",
+    "matched_topics": [
+      "complaint procedure",
+      "annual reporting",
+      "faculty governance"
+    ]
+  }
+}

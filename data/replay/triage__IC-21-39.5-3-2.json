@@ -1,0 +1,14 @@
+{
+  "key": "triage__IC-21-39.5-3-2",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.93,
+    "rationale": "Requires the institution to include specified free-expression and intellectual-diversity content in new student programming.",
+    "matched_topics": [
+      "new student programming",
+      "student orientation"
+    ]
+  }
+}

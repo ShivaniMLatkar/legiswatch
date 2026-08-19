@@ -1,0 +1,14 @@
+{
+  "key": "verify__CHE-HEA1001-submit-program-metrics",
+  "schema": "VerificationVerdict",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligation_id": "CHE-HEA1001-submit-program-metrics",
+    "quote_is_grounded": true,
+    "summary_is_faithful": true,
+    "deadline_is_correct": true,
+    "unit_is_defensible": true,
+    "verifier_confidence": 0.94,
+    "objection": null
+  }
+}

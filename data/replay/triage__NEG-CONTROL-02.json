@@ -1,0 +1,11 @@
+{
+  "key": "triage__NEG-CONTROL-02",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": false,
+    "confidence": 0.97,
+    "rationale": "Concerns rate schedule filings by municipally owned water utilities before the utility regulatory commission. No institutional duty.",
+    "matched_topics": []
+  }
+}

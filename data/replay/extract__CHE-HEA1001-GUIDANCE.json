@@ -1,0 +1,49 @@
+{
+  "key": "extract__CHE-HEA1001-GUIDANCE",
+  "schema": "ExtractionResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "obligations": [
+      {
+        "obligation_id": "CHE-HEA1001-submit-program-metrics",
+        "summary": "Submit to the Commission the Replacement Ratio, Credit Hour Production Ratio, Viability Index, three-year graduate averages, a 250-word Program Overview, and a 500-word Rationale to Continue.",
+        "obligation_type": "report",
+        "recurrence": "one_time",
+        "verbatim_quote": "Institutions must provide to the Commission the Replacement Ratio for all degree programs, the Credit Hour Production Ratio for undergraduate programs only, the Viability Index for undergraduate programs, three-year average graduate counts for under-threshold programs, a Program Overview limited to 250 words, and a Rationale to Continue limited to 500 words.",
+        "citation": "CHE Guidance, HEA 1001-2025",
+        "deadline_text": null,
+        "first_due_date": null,
+        "responsible_unit": "INSTITUTIONAL_ANALYTICS",
+        "unit_rationale": "The required submissions are ratio and index metrics computed from institutional data.",
+        "confidence": 0.93
+      },
+      {
+        "obligation_id": "CHE-HEA1001-implement-suspensions-before-ay2627",
+        "summary": "Implement any approved program suspensions or mergers before academic year 2026-2027.",
+        "obligation_type": "process",
+        "recurrence": "one_time",
+        "verbatim_quote": "Any approved suspensions or mergers must be implemented before academic year 2026-2027.",
+        "citation": "CHE Guidance, HEA 1001-2025",
+        "deadline_text": "before academic year 2026-2027",
+        "first_due_date": null,
+        "responsible_unit": "ACADEMIC_AFFAIRS",
+        "unit_rationale": "Program suspension and merger execution is an academic affairs responsibility.",
+        "confidence": 0.86
+      },
+      {
+        "obligation_id": "CHE-HEA1001-preliminary-list-response",
+        "summary": "Respond to the Commission's preliminary under-threshold program list within 30 days of receipt.",
+        "obligation_type": "report",
+        "recurrence": "one_time",
+        "verbatim_quote": "In mid-to-late July the Commission will provide institutions a preliminary list of under-threshold programs.",
+        "citation": "CHE Guidance, HEA 1001-2025",
+        "deadline_text": "within 30 days of receipt",
+        "first_due_date": null,
+        "responsible_unit": "ACADEMIC_AFFAIRS",
+        "unit_rationale": "Institutional response to the preliminary list would be coordinated by academic affairs.",
+        "confidence": 0.68
+      }
+    ],
+    "extraction_notes": "The guidance describes a Commission action in mid-to-late July; whether it creates a responsive institutional deadline is not stated."
+  }
+}

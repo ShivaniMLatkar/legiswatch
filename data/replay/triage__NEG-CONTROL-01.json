@@ -1,0 +1,11 @@
+{
+  "key": "triage__NEG-CONTROL-01",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": false,
+    "confidence": 0.96,
+    "rationale": "Concerns registration of agricultural implements with the bureau of motor vehicles and county highway mileage reporting. No duty attaches to a state educational institution.",
+    "matched_topics": []
+  }
+}

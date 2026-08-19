@@ -1,0 +1,15 @@
+{
+  "key": "triage__IC-21-42-5-4",
+  "schema": "TriageResult",
+  "model": "claude-sonnet-4-5",
+  "response": {
+    "is_relevant": true,
+    "confidence": 0.95,
+    "rationale": "Names Indiana University explicitly and requires it to identify transfer equivalents that apply consistently across all regional campuses in the system.",
+    "matched_topics": [
+      "transfer credit",
+      "core transfer library",
+      "regional campuses"
+    ]
+  }
+}

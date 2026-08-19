@@ -1,0 +1,252 @@
+{
+  "gold_version": "1.0",
+  "description": "Hand-labelled obligation set for the LegisWatch corpus. Built by reading each source document directly and enumerating every duty it places on Indiana University, independently of any pipeline output. This is the denominator for recall and the arbiter for precision.",
+  "labelling_notes": [
+    "Duties placed solely on the commission for higher education are excluded unless they require an institutional submission. IC 21-39.5-2-4(b) is therefore deliberately absent.",
+    "IC-21-18-9-10.7-monitor-graduate-averages is included as a real operational duty even though the statute states it as a test rather than a command. It is labelled ambiguous=true, and a pipeline that routes it to human review rather than auto-filing it is behaving correctly.",
+    "One gold entry (g05) is a duty the current prompt does not reliably surface. It is kept in the gold set on purpose: an eval that only contains what the system already finds cannot measure recall."
+  ],
+  "match_rule": "A prediction matches a gold entry when the normalised citations align AND token_set_ratio(prediction.summary, gold.canonical_summary) >= 55.",
+  "obligations": [
+    {
+      "gold_id": "g01",
+      "doc_id": "IC-21-18-9-10.7",
+      "citation": "IC 21-18-9-10.7(a)",
+      "canonical_summary": "Request Commission for Higher Education approval to continue a degree program whose three-year average graduate count falls below the statutory threshold.",
+      "expected_type": "process",
+      "expected_unit": "ACADEMIC_AFFAIRS",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g02",
+      "doc_id": "IC-21-18-9-10.7",
+      "citation": "IC 21-18-9-10.7(b)",
+      "canonical_summary": "Eliminate the degree program and its associated costs where the Commission does not grant approval to continue.",
+      "expected_type": "process",
+      "expected_unit": "ACADEMIC_AFFAIRS",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g03",
+      "doc_id": "IC-21-18-9-10.7",
+      "citation": "IC 21-18-9-10.7(a)(1)",
+      "canonical_summary": "Maintain three-year rolling average graduate counts per degree program to determine threshold status.",
+      "expected_type": "recordkeeping",
+      "expected_unit": "INSTITUTIONAL_ANALYTICS",
+      "expected_deadline": null,
+      "ambiguous": true
+    },
+    {
+      "gold_id": "g04",
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2(a)",
+      "canonical_summary": "Review each tenured faculty member against the five statutory criteria within five years of tenure and every five years thereafter.",
+      "expected_type": "process",
+      "expected_unit": "BOARD_OF_TRUSTEES",
+      "expected_deadline": "five years after tenure, then every five years",
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g05",
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2(b)",
+      "canonical_summary": "Assess and review institutional staffing needs across branches, campuses, extension centers, colleges, schools and approved degree programs as part of each post-tenure review.",
+      "expected_type": "process",
+      "expected_unit": "BOARD_OF_TRUSTEES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g06",
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2(c)",
+      "canonical_summary": "Certify the determination when the board finds a faculty member has met the criteria.",
+      "expected_type": "recordkeeping",
+      "expected_unit": "BOARD_OF_TRUSTEES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g07",
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2(e)",
+      "canonical_summary": "Adopt a disciplinary policy establishing termination, demotion, salary reduction or other action where a tenured faculty member fails to meet the criteria.",
+      "expected_type": "policy",
+      "expected_unit": "HUMAN_RESOURCES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g08",
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2(f)",
+      "canonical_summary": "Review and renew or amend the post-tenure review process and board-established criteria at least every five years.",
+      "expected_type": "process",
+      "expected_unit": "BOARD_OF_TRUSTEES",
+      "expected_deadline": "at least every five years",
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g09",
+      "doc_id": "IC-21-39.5-2-2",
+      "citation": "IC 21-39.5-2-2(g)",
+      "canonical_summary": "Submit the post-tenure review process and criteria to the Commission for Higher Education each time they are reviewed, renewed or amended.",
+      "expected_type": "report",
+      "expected_unit": "BOARD_OF_TRUSTEES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g10",
+      "doc_id": "IC-21-39.5-2-3",
+      "citation": "IC 21-39.5-2-3(b)",
+      "canonical_summary": "Give substantial consideration to the section 2(a) criteria before renewing a faculty contract, making a bonus decision, or completing a performance assessment.",
+      "expected_type": "process",
+      "expected_unit": "HUMAN_RESOURCES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g11",
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4(a)(1)",
+      "canonical_summary": "Establish a procedure allowing students and employees to submit complaints that a faculty member is not meeting the statutory criteria.",
+      "expected_type": "policy",
+      "expected_unit": "HUMAN_RESOURCES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g12",
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4(a)(2)",
+      "canonical_summary": "Provide information about the complaint procedure at student orientations, on the institution website, and during employee onboarding.",
+      "expected_type": "disclosure",
+      "expected_unit": "STUDENT_SUCCESS",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g13",
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4(a)(3)",
+      "canonical_summary": "Refer submitted complaints to appropriate human resource professionals and supervisors for consideration in employee reviews and tenure and promotion decisions.",
+      "expected_type": "process",
+      "expected_unit": "HUMAN_RESOURCES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g14",
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4(a)(4)",
+      "canonical_summary": "Make submitted complaints and any relevant documents, summaries or investigations available to the board of trustees.",
+      "expected_type": "disclosure",
+      "expected_unit": "BOARD_OF_TRUSTEES",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g15",
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4(a)(5)",
+      "canonical_summary": "Submit an annual report to the Commission for Higher Education summarising the complaint procedure, how it was publicised, and complaint counts disaggregated by type.",
+      "expected_type": "report",
+      "expected_unit": "ACCREDITATION",
+      "expected_deadline": "not later than April 1, 2025 and April 1 each year thereafter",
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g16",
+      "doc_id": "IC-21-39.5-2-4",
+      "citation": "IC 21-39.5-2-4(c)",
+      "canonical_summary": "Exclude identifying information about complainants and about faculty members who are the subject of complaints from reports.",
+      "expected_type": "prohibition",
+      "expected_unit": "GENERAL_COUNSEL",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g17",
+      "doc_id": "IC-21-39.5-3-2",
+      "citation": "IC 21-39.5-3-2",
+      "canonical_summary": "Include free inquiry, free expression, intellectual diversity, and appropriate responses to offensive speech in programming for new students.",
+      "expected_type": "disclosure",
+      "expected_unit": "STUDENT_SUCCESS",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g18",
+      "doc_id": "IC-21-42-3-5",
+      "citation": "IC 21-42-3-5(a)",
+      "canonical_summary": "Do not require a transfer student who has completed the Indiana college core to take additional college core courses.",
+      "expected_type": "prohibition",
+      "expected_unit": "REGISTRAR",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g19",
+      "doc_id": "IC-21-42-3-5",
+      "citation": "IC 21-42-3-5(b)",
+      "canonical_summary": "Award credit for satisfactorily completed transfer courses based on the course-to-course equivalencies of the core transfer library.",
+      "expected_type": "process",
+      "expected_unit": "REGISTRAR",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g20",
+      "doc_id": "IC-21-42-3-5",
+      "citation": "IC 21-42-3-5(c)",
+      "canonical_summary": "Treat a holder of a Commission-approved associate of arts or science degree as having met at least thirty semester credit hours of general education requirements.",
+      "expected_type": "process",
+      "expected_unit": "REGISTRAR",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g21",
+      "doc_id": "IC-21-42-5-4",
+      "citation": "IC 21-42-5-4(4)",
+      "canonical_summary": "Identify transfer equivalents so a core transfer library course accepted by one IU regional campus is accepted by all regional campuses offering the same equivalent.",
+      "expected_type": "process",
+      "expected_unit": "REGISTRAR",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g22",
+      "doc_id": "IC-21-42-5-4",
+      "citation": "IC 21-42-5-4(5)",
+      "canonical_summary": "Ensure equivalent courses, including those with the same course number and title, count identically at every campus in the IU system where offered.",
+      "expected_type": "process",
+      "expected_unit": "REGISTRAR",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g23",
+      "doc_id": "CHE-HEA1001-GUIDANCE",
+      "citation": "CHE Guidance, HEA 1001-2025",
+      "canonical_summary": "Provide the Commission with the Replacement Ratio, Credit Hour Production Ratio, Viability Index, three-year graduate averages, a 250-word Program Overview and a 500-word Rationale to Continue.",
+      "expected_type": "report",
+      "expected_unit": "INSTITUTIONAL_ANALYTICS",
+      "expected_deadline": null,
+      "ambiguous": false
+    },
+    {
+      "gold_id": "g24",
+      "doc_id": "CHE-HEA1001-GUIDANCE",
+      "citation": "CHE Guidance, HEA 1001-2025",
+      "canonical_summary": "Implement approved program suspensions or mergers before academic year 2026-2027.",
+      "expected_type": "process",
+      "expected_unit": "ACADEMIC_AFFAIRS",
+      "expected_deadline": "before academic year 2026-2027",
+      "ambiguous": false
+    }
+  ]
+}
