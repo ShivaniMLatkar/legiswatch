@@ -2,10 +2,6 @@
 
 **Turning legal text into a compliance register an auditor can defend — with guardrails that assume the model is wrong.**
 
-[![CI](https://github.com/ShivaniMLatkar/legiswatch/actions/workflows/ci.yml/badge.svg)](https://github.com/ShivaniMLatkar/legiswatch/actions/workflows/ci.yml)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-
 LegisWatch reads legislative and regulatory documents and produces a register of
 discrete institutional obligations. Each entry carries its deadline, its owning
 office, and the exact statutory language it was drawn from.
